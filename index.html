@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Grid Game Architecture Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <h1>DOM Grid Engine</h1>
+      <p>State is stored 100% within DOM data-attributes. Click tiles to modify state.</p>
+      <div class="stats-panel">
+        <div class="stat-box">Grass: <span id="count-grass">0</span></div>
+        <div class="stat-box">Water: <span id="count-water">0</span></div>
+        <div class="stat-box">Mountain: <span id="count-mountain">0</span></div>
+      </div>
+    </header>
+
+    <main id="game-board" class="grid-board"></main>
+  </div>
+
+  <dialog id="tile-menu" class="centered-menu">
+    <form method="dialog" class="menu-form">
+      <h3>Modify Tile State</h3>
+      <div class="options-container">
+        <button type="submit" name="terrain" value="grass" class="menu-option option-grass">
+          <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V15H11V17M11,13H13V7H11V13Z"/></svg>
+          <span>Grass Terrain</span>
+        </button>
+        <button type="submit" name="terrain" value="water" class="menu-option option-water">
+          <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C16.42,4 20,7.58 20,12C20,16.42 16.42,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z"/></svg>
+          <span>Water Terrain</span>
+        </button>
+        <button type="submit" name="terrain" value="mountain" class="menu-option option-mountain">
+          <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M14,6L10.25,11L13.12,14.88L12,16H3V19H21V16H14V6Z"/></svg>
+          <span>Mountain Terrain</span>
+        </button>
+      </div>
+      <button type="button" id="menu-cancel" class="cancel-btn">Cancel</button>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
