@@ -39,23 +39,9 @@ body {
   margin-bottom: 12px;
 }
 
-.stats-panel {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.stat-box {
-  background: #2a2a32;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 13px;
-  border: 1px solid #444;
-}
-
 /* Perfect Square Rigid Grid Layout — Protected against sub-pixel fractional fracturing */
 .grid-board {
-  --grid-size: 20; /* The true single source of truth for grid size */
+  --grid-size: 10; /* The true single source of truth for grid size */
   display: grid;
   grid-template-columns: repeat(var(--grid-size), 1fr);
   grid-template-rows: repeat(var(--grid-size), 1fr);

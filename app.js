@@ -5,13 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const GRID_SIZE = parseInt(getComputedStyle(board).getPropertyValue('--grid-size').trim(), 10) || 20;
 
-  const countsUI = {
-    grass: document.getElementById('count-grass'),
-    water: document.getElementById('count-water'),
-    mountain: document.getElementById('count-mountain')
-  };
-
-  const metrics = { grass: 0, water: 0, mountain: 0 };
   let activeTile = null;
 
   function initGrid() {
@@ -31,12 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
         tile.dataset.terrain = 'grass';
         tile.dataset.owner = 'none';
         
-        metrics.grass++;
         fragment.appendChild(tile);
       }
     }
     board.appendChild(fragment);
-    renderMetrics();
   }
 
   function openTileMenu(tile) {
@@ -75,10 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const formattedTerrain = newTerrain.charAt(0).toUpperCase() + newTerrain.slice(1);
         targetTile.setAttribute('aria-label', `${formattedTerrain} terrain tile at row ${r}, column ${c}`);
-        
-        metrics[oldTerrain]--;
-        metrics[newTerrain]++;
-        renderMetrics();
       }
     }
     
@@ -93,12 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
   cancelBtn.addEventListener('click', () => {
     menu.close(''); 
   });
-
-  function renderMetrics() {
-    countsUI.grass.textContent = metrics.grass;
-    countsUI.water.textContent = metrics.water;
-    countsUI.mountain.textContent = metrics.mountain;
-  }
 
   initGrid();
 });
