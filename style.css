@@ -55,9 +55,11 @@ body {
 
 /* Base style for every stateful tile */
 .tile {
-  background-color: #2c2c35;
+  background-size: cover;       /* Ensures the image covers the entire tile */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
   cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
   outline: none;
 }
 
@@ -66,7 +68,7 @@ body {
 .tile:focus-visible {
   transform: scale(1.05);
   z-index: 2;
-  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 /* Highlight tile when focus is gained strictly via keyboard navigation */
@@ -74,20 +76,56 @@ body {
   outline: 2px solid #4f9bfd;
 }
 
-/* CSS UI representation completely mapped via data-attributes */
+/* CSS UI representation using background images */
 .tile[data-terrain="unset"] { background-color: #616161; opacity: 0.7; }
-.tile[data-terrain="dungeon-room"] { background-color: #5d4037; }
-.tile[data-terrain="bottomless-pit"] { background-color: #263238; }
-.tile[data-terrain="catacomb-entrance"] { background-color: #4e342e; }
-.tile[data-terrain="trap-room"] { background-color: #6d4c41; }
-.tile[data-terrain="tower-room"] { background-color: #795548; }
-.tile[data-terrain="chamber-of-darkness"] { background-color: #37474f; }
-.tile[data-terrain="treasure-chamber"] { background-color: #ff8f00; }
-.tile[data-terrain="corridor"] { background-color: #616161; }
-.tile[data-terrain="chasm"] { background-color: #424242; }
-.tile[data-terrain="cave-in"] { background-color: #546e7a; }
-.tile[data-terrain="bridge"] { background-color: #8d6e63; }
-.tile[data-terrain="rotating-room"] { background-color: #6d4c41; }
+.tile[data-terrain="dungeon-room"] {
+  background-color: #5d4037;
+  background-image: url("./images/tiles/dchoaub-a8c150c3-f229-4127-a85a-6f23fcef5dfd/00.png");
+}
+.tile[data-terrain="bottomless-pit"] {
+  background-color: #263238;
+  background-image: url("./images/tiles/dcii6b4-7b7a6615-f179-4783-9a5a-d73c79026d22/08.png");
+}
+.tile[data-terrain="catacomb-entrance"] {
+  background-color: #4e342e;
+  background-image: url("./images/tiles/dcizgt9-df025130-02d7-4c89-b78f-f3bbac994e5d/02.png");
+}
+.tile[data-terrain="trap-room"] {
+  background-color: #6d4c41;
+  background-image: url("./images/tiles/dcii6b4-7b7a6615-f179-4783-9a5a-d73c79026d22/01.png");
+}
+.tile[data-terrain="tower-room"] {
+  background-color: #795548;
+  background-image: url("./images/tiles/");
+}
+.tile[data-terrain="chamber-of-darkness"] {
+   background-color: #37474f;
+  background-image: url("./images/tiles/dchoaub-a8c150c3-f229-4127-a85a-6f23fcef5dfd/11.png");
+}
+.tile[data-terrain="treasure-chamber"] {
+  background-color: #ff8f00;
+  background-image: url("./images/tiles/");
+}
+.tile[data-terrain="corridor"] {
+  background-color: #616161;
+  background-image: url("./images/tiles/dchob0p-7a5cac09-3da7-438a-a68b-8feccc017615/05.png");
+}
+.tile[data-terrain="chasm"] {
+  background-color: #424242;
+  background-image: url("./images/tiles/dchv2xb-891ab3f8-1d54-4549-89b9-915907c3f031/11.png");
+}
+.tile[data-terrain="cave-in"] {
+  background-color: #546e7a;
+  background-image: url("./images/tiles/dchv2xb-891ab3f8-1d54-4549-89b9-915907c3f031/10.png");
+}
+.tile[data-terrain="bridge"] {
+  background-color: #8d6e63;
+  background-image: url("./images/tiles/dcizgt9-df025130-02d7-4c89-b78f-f3bbac994e5d/00.png");
+}
+.tile[data-terrain="rotating-room"] {
+  background-color: #6d4c41;
+  background-image: url("./images/tiles/dchob7c-3d8940d5-e7ed-4e42-8c01-cf9297b17775/09.png");
+}
 
 .option-unset .icon { color: #616161; }
 .option-dungeon-room .icon { color: #5d4037; }
