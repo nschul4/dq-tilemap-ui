@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         tile.setAttribute('role', 'button');
         tile.setAttribute('tabindex', '0');
-        tile.setAttribute('aria-label', `Grass terrain tile at row ${r + 1}, column ${c + 1}`);
+        tile.setAttribute('aria-label', `Unset tile at row ${r + 1}, column ${c + 1}`);
         
         tile.dataset.row = r;
         tile.dataset.col = c;
-        tile.dataset.terrain = 'grass';
+        tile.dataset.terrain = 'unset';
         tile.dataset.owner = 'none';
         
         fragment.appendChild(tile);
@@ -63,9 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const r = parseInt(targetTile.dataset.row, 10) + 1;
         const c = parseInt(targetTile.dataset.col, 10) + 1;
-        
-        const formattedTerrain = newTerrain.charAt(0).toUpperCase() + newTerrain.slice(1);
-        targetTile.setAttribute('aria-label', `${formattedTerrain} terrain tile at row ${r}, column ${c}`);
+
+        // In the menu.addEventListener('close') function:
+        const formattedTerrain = newTerrain === 'unset'
+        ? 'Unset'
+        : newTerrain.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        targetTile.setAttribute('aria-label', `${formattedTerrain} tile at row ${r}, column ${c}`);
       }
     }
     
