@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const GRID_SIZE = parseInt(getComputedStyle(board).getPropertyValue('--grid-size').trim(), 10) || 20;
 
   let activeTile = null;
+  let clickedRow = null;
+  let clickedCol = null;
 
   function initGrid() {
     const fragment = document.createDocumentFragment();
@@ -32,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openTileMenu(tile) {
     activeTile = tile;
+    clickedRow = tile.dataset.row;
+    clickedCol = tile.dataset.col;
     menu.showModal();
   }
 
@@ -52,36 +56,36 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   menu.addEventListener('close', () => {
-    const targetTile = activeTile;
-
-    if (menu.returnValue && targetTile) {
-      const oldTerrain = targetTile.dataset.terrain;
+    if (menu.returnValue) {
+      const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
       const newTerrain = menu.returnValue;
 
-      if (oldTerrain !== newTerrain) {
-        targetTile.dataset.terrain = newTerrain;
-        
-        const r = parseInt(targetTile.dataset.row, 10) + 1;
-        const c = parseInt(targetTile.dataset.col, 10) + 1;
+      if (newTerrain === 'unset') {
+        targetTile.dataset.terrain = 'unset';
+        delete targetTile.dataset.variant;
+        targetTile.style.backgroundImage = '';
+      } else {
+        const baseTerrain = newTerrain.replace(/-variant-\d+$/, '');
+        targetTile.dataset.terrain = baseTerrain;
+        targetTile.dataset.variant = newTerrain;
 
-        // In the menu.addEventListener('close') function:
-        const formattedTerrain = newTerrain === 'unset'
-        ? 'Unset'
-        : newTerrain.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-        targetTile.setAttribute('aria-label', `${formattedTerrain} tile at row ${r}, column ${c}`);
+        const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
+        targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
       }
-    }
-    
-    if (targetTile) {
-      targetTile.focus();
-    }
 
-    activeTile = null;
-    menu.returnValue = '';
+      // Update ARIA label and focus
+      const r = parseInt(clickedRow, 10) + 1;
+      const c = parseInt(clickedCol, 10) + 1;
+      const formattedTerrain = targetTile.dataset.terrain === 'unset'
+        ? 'Unset'
+        : targetTile.dataset.terrain.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+      targetTile.setAttribute('aria-label', `${formattedTerrain} tile at row ${r}, column ${c}`);
+      targetTile.focus(); // Return focus to the tile
+    }
   });
 
   cancelBtn.addEventListener('click', () => {
-    menu.close(''); 
+    menu.close('');
   });
 
   initGrid();

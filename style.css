@@ -55,9 +55,9 @@ body {
 
 /* Base style for every stateful tile */
 .tile {
-  background-size: cover;       /* Ensures the image covers the entire tile */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   outline: none;
@@ -80,51 +80,39 @@ body {
 .tile[data-terrain="unset"] { background-color: #616161; opacity: 0.7; }
 .tile[data-terrain="dungeon-room"] {
   background-color: #5d4037;
-  background-image: url("./images/tiles/dchoaub-a8c150c3-f229-4127-a85a-6f23fcef5dfd/00.png");
 }
 .tile[data-terrain="bottomless-pit"] {
   background-color: #263238;
-  background-image: url("./images/tiles/dcii6b4-7b7a6615-f179-4783-9a5a-d73c79026d22/08.png");
 }
 .tile[data-terrain="catacomb-entrance"] {
   background-color: #4e342e;
-  background-image: url("./images/tiles/dcizgt9-df025130-02d7-4c89-b78f-f3bbac994e5d/02.png");
 }
 .tile[data-terrain="trap-room"] {
   background-color: #6d4c41;
-  background-image: url("./images/tiles/dcii6b4-7b7a6615-f179-4783-9a5a-d73c79026d22/01.png");
 }
 .tile[data-terrain="tower-room"] {
   background-color: #795548;
-  background-image: url("./images/tiles/");
 }
 .tile[data-terrain="chamber-of-darkness"] {
    background-color: #37474f;
-  background-image: url("./images/tiles/dchoaub-a8c150c3-f229-4127-a85a-6f23fcef5dfd/11.png");
 }
 .tile[data-terrain="treasure-chamber"] {
   background-color: #ff8f00;
-  background-image: url("./images/tiles/");
 }
 .tile[data-terrain="corridor"] {
   background-color: #616161;
-  background-image: url("./images/tiles/dchob0p-7a5cac09-3da7-438a-a68b-8feccc017615/05.png");
 }
 .tile[data-terrain="chasm"] {
   background-color: #424242;
-  background-image: url("./images/tiles/dchv2xb-891ab3f8-1d54-4549-89b9-915907c3f031/11.png");
 }
 .tile[data-terrain="cave-in"] {
   background-color: #546e7a;
-  background-image: url("./images/tiles/dchv2xb-891ab3f8-1d54-4549-89b9-915907c3f031/10.png");
 }
 .tile[data-terrain="bridge"] {
   background-color: #8d6e63;
-  background-image: url("./images/tiles/dcizgt9-df025130-02d7-4c89-b78f-f3bbac994e5d/00.png");
 }
 .tile[data-terrain="rotating-room"] {
   background-color: #6d4c41;
-  background-image: url("./images/tiles/dchob7c-3d8940d5-e7ed-4e42-8c01-cf9297b17775/09.png");
 }
 
 .option-unset .icon { color: #616161; }
@@ -144,10 +132,71 @@ body {
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   margin-bottom: 16px;
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: auto;
+}
+
+.tile-category {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tile-category h4 {
+  font-size: 15px;
+  color: #4f9bfd;
+  margin-bottom: 4px;
+}
+
+.tile-variants {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  max-width: 250px;
+}
+
+.tile-variants::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tile-variants::-webkit-scrollbar-thumb {
+  background: #4a4a57;
+  border-radius: 3px;
+}
+
+.tile-variants::-webkit-scrollbar-track {
+  background: #3a3a45;
+}
+
+.tile-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: #3a3a45;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  transition: background 0.2s;
+}
+
+.tile-option img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.tile-option:hover {
+  background: #4a4a57;
+  border-color: #666;
 }
 
 /* Stateful UI accents via ownership data-attributes */
