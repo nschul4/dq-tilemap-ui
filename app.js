@@ -45,6 +45,25 @@ document.addEventListener('DOMContentLoaded', () => {
     openTileMenu(tile);
   });
 
+  // Handle right-click rotation
+  board.addEventListener('contextmenu', (e) => {
+    const tile = e.target.closest('.tile');
+    if (!tile || tile.dataset.terrain === 'unset') return;
+
+    e.preventDefault(); // Block native browser context menu
+
+    let currentRotation = parseInt(tile.dataset.rotation, 10) || 0;
+
+    if (e.shiftKey || e.ctrlKey) {
+      currentRotation -= 90; // Counter-clockwise
+    } else {
+      currentRotation += 90; // Clockwise
+    }
+
+    tile.dataset.rotation = currentRotation;
+    tile.style.setProperty('--tile-rotation', `${currentRotation}deg`);
+  });
+
   board.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const tile = e.target.closest('.tile');
@@ -63,7 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (newTerrain === 'unset') {
         targetTile.dataset.terrain = 'unset';
         delete targetTile.dataset.variant;
+        delete targetTile.dataset.rotation;
         targetTile.style.backgroundImage = '';
+        targetTile.style.removeProperty('--tile-rotation');
       } else {
         const baseTerrain = newTerrain.replace(/-variant-\d+$/, '');
         targetTile.dataset.terrain = baseTerrain;

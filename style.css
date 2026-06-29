@@ -61,12 +61,14 @@ body {
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   outline: none;
+  /* Combine scale and rotation variables to prevent hover overrides */
+  transform: scale(var(--tile-scale, 1)) rotate(var(--tile-rotation, 0deg));
 }
 
 /* Grouping hover and keyboard focus states for uniform accessibility */
 .tile:hover,
 .tile:focus-visible {
-  transform: scale(1.05);
+  --tile-scale: 1.05;
   z-index: 2;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
