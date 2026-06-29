@@ -213,9 +213,9 @@ body {
   background: #2a2a32;
   color: #fff;
   padding: 24px;
-  width: 280px;
+  width: 350px; /* Increased from 280px */
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  margin: auto; /* Standard browser centering trick for dialog */
+  margin: auto;
 }
 
 .centered-menu::backdrop {
