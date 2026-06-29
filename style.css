@@ -151,11 +151,13 @@ body {
 }
 
 .tile-variants {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  overflow-x: auto;
   padding: 4px 0;
-  max-width: 250px;
+  max-width: none;
+  overflow-x: visible;
+  overflow-y: visible;
 }
 
 .tile-variants::-webkit-scrollbar {
