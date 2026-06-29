@@ -161,7 +161,7 @@ body {
 }
 
 .tile-variants::-webkit-scrollbar {
-  height: 6px;
+  display: none;
 }
 
 .tile-variants::-webkit-scrollbar-thumb {
