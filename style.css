@@ -152,7 +152,7 @@ body {
 
 .tile-variants {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   padding: 4px 0;
   max-width: none;
@@ -213,7 +213,7 @@ body {
   background: #2a2a32;
   color: #fff;
   padding: 24px;
-  width: 350px; /* Increased from 280px */
+  width: 450px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   margin: auto;
 }
