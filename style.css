@@ -21,48 +21,52 @@ body {
   --grid-size-cols: 13;
   --grid-size-rows: 10;
 
-  /* 1. Pre-defining nudge offsets (defaulting to 0) */
+  /* Your nudge offsets can now be adjusted independently */
   --grid-nudge-x: 0px;
   --grid-nudge-y: 0px;
 }
 
+/* 1. The container just acts as a neutral positioning stage */
 .game-container {
-  /* Establish base size based entirely on native tile dimensions */
-  width: calc(var(--grid-size-cols) * var(--tile-native-size));
-  max-width: 100%;
-
-  /* 2. Force height to scale dynamically using aspect-ratio */
-  height: auto;
-  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
-
   position: relative;
-  overflow: hidden; /* Prevents nudged elements from clipping layout boundaries */
+  width: calc(var(--grid-size-cols) * var(--tile-native-size)); /* 2600px */
+  height: calc(var(--grid-size-rows) * var(--tile-native-size)); /* 2000px */
 }
 
-.game-background {
+/* 2. COMPLETELY DECOUPLED BACKGROUND LAYER */
+.game-background-img {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./images/original/dcjkc49-ab8e949d-2bbb-430a-a739-4453b836d854.png');
-  /* 3. contain ensures the background image matches the exact aspect ratio bounds */
-  background-size: contain;
-  background-repeat: no-repeat;
-  z-index: -1;
+  
+  /* Strip away width: 100% or height: 100%.
+     This forces the browser to display the image file at its literal, original pixel dimensions. */
+  width: auto;
+  height: auto;
+  
+  pointer-events: none;
   opacity: 0.9;
+  z-index: 1;
 }
 
+/* 3. COMPLETELY DECOUPLED HTML GRID LAYER */
 .grid-board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* Hardcode the grid dimensions to exactly match the 200px tiles */
+  width: calc(var(--grid-size-cols) * var(--tile-native-size));  /* 2600px */
+  height: calc(var(--grid-size-rows) * var(--tile-native-size)); /* 2000px */
+  
   display: grid;
-  grid-template-columns: repeat(var(--grid-size-cols), 1fr);
-  grid-template-rows: repeat(var(--grid-size-rows), 1fr);
-  width: 100%;
-  height: 100%;
+  grid-template-columns: repeat(var(--grid-size-cols), var(--tile-native-size));
+  grid-template-rows: repeat(var(--grid-size-rows), var(--tile-native-size));
+  
+  z-index: 2;
 
-  /* 4. Implement nudge transformations */
+  /* This will shift ONLY the HTML grid over the completely unlinked background image */
   transform: translate(var(--grid-nudge-x), var(--grid-nudge-y));
-  position: relative;
 }
 
 .tile[data-terrain="unset"] {
