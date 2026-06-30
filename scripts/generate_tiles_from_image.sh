@@ -4,7 +4,7 @@
 set -e
 
 # --- Argument Handling ---
-# Usage: generate_tiles_from_original.sh <INPUT_FILE> <OUTPUT_DIR>
+# Usage: generate_tiles_from_image.sh <INPUT_FILE> <OUTPUT_DIR>
 
 if [ -z "$1" ]; then
     echo "Please provide the path to the input image."
