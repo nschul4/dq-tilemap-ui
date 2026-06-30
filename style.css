@@ -17,6 +17,8 @@ body {
 }
 
 .game-container {
+  width: 100%;
+  max-width: 1200px; /* Adjust as needed */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,21 +41,20 @@ body {
   margin-bottom: 12px;
 }
 
-/* Perfect Square Rigid Grid Layout — Protected against sub-pixel fractional fracturing */
 .grid-board {
-  --grid-size: 10; /* The true single source of truth for grid size */
+  --grid-size-cols: 10;
+  --grid-size-rows: 13;
   display: grid;
-  grid-template-columns: repeat(var(--grid-size), 1fr);
-  grid-template-rows: repeat(var(--grid-size), 1fr);
-  width: 1000px;
-  height: 1000px;
-  aspect-ratio: 1 / 1;
+  grid-template-columns: repeat(var(--grid-size-cols), 1fr);
+  grid-template-rows: repeat(var(--grid-size-rows), 1fr);
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows); /* Enforce aspect ratio based on columns/rows */
   background-color: #111;
   border: 4px solid #333;
-  gap: 1px; /* Crisp grid lines without layout disruption */
+  gap: 1px;
 }
 
-/* Base style for every stateful tile */
 .tile {
   background-size: contain;
   background-repeat: no-repeat;
@@ -61,8 +62,10 @@ body {
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   outline: none;
-  /* Combine scale and rotation variables to prevent hover overrides */
   transform: scale(var(--tile-scale, 1)) rotate(var(--tile-rotation, 0deg));
+  aspect-ratio: 1 / 1; /* Force each cell to be square */
+  width: 100%;
+  height: auto; /* Let height adjust based on width */
 }
 
 /* Grouping hover and keyboard focus states for uniform accessibility */

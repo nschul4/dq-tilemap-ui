@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const menu = document.getElementById('tile-menu');
   const cancelBtn = document.getElementById('menu-cancel');
 
-  const GRID_SIZE = parseInt(getComputedStyle(board).getPropertyValue('--grid-size').trim(), 10) || 20;
+  const GRID_COLS = parseInt(getComputedStyle(board).getPropertyValue('--grid-size-cols').trim(), 10) || 13;
+  const GRID_ROWS = parseInt(getComputedStyle(board).getPropertyValue('--grid-size-rows').trim(), 10) || 10;
 
   let activeTile = null;
   let clickedRow = null;
@@ -12,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function initGrid() {
     const fragment = document.createDocumentFragment();
 
-    for (let r = 0; r < GRID_SIZE; r++) {
-      for (let c = 0; c < GRID_SIZE; c++) {
+    for (let r = 0; r < GRID_ROWS; r++) {
+      for (let c = 0; c < GRID_COLS; c++) {
         const tile = document.createElement('div');
         tile.classList.add('tile');
         
