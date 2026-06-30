@@ -40,16 +40,6 @@ body {
   opacity: 0.9;
 }
 
-.game-background::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.0);
-}
-
 .grid-board, .game-header, .centered-menu {
   position: relative;
   z-index: 1;
@@ -82,9 +72,15 @@ body {
   aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
   background-color: rgba(0, 0, 0, 0.0);
   border: 4px solid #333;
-  gap: 1px;
+  gap: 0px;
   position: relative;
   z-index: 1;
+}
+
+.tile[data-terrain="unset"] {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  opacity: 0.5;
 }
 
 .tile {
@@ -95,9 +91,6 @@ body {
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   outline: none;
   transform: scale(var(--tile-scale, 1)) rotate(var(--tile-rotation, 0deg));
-  aspect-ratio: 1 / 1; /* Force each cell to be square */
-  width: 100%;
-  height: auto; /* Let height adjust based on width */
 }
 
 /* Grouping hover and keyboard focus states for uniform accessibility */
@@ -173,7 +166,7 @@ body {
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 16px;
   max-height: 500px;
   overflow-y: auto;
@@ -271,13 +264,6 @@ body {
   color: #4f9bfd;
 }
 
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
 .menu-option {
   display: flex;
   align-items: center;
@@ -303,10 +289,6 @@ body {
   height: 20px;
   fill: currentColor;
 }
-
-.option-grass .icon { color: #4caf50; }
-.option-water .icon { color: #2196f3; }
-.option-mountain .icon { color: #795548; }
 
 .cancel-btn {
   background: transparent;
