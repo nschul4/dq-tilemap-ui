@@ -56,7 +56,7 @@ body {
 }
 
 .tile {
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
@@ -190,8 +190,8 @@ body {
   cursor: pointer;
   font-size: 12px;
   text-align: center;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   transition: background 0.2s;
 }
 

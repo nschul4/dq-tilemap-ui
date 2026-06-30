@@ -22,7 +22,7 @@ fi
 INPUT_FILE=$1
 OUTPUT_DIR=$2
 
-TILE_WIDTH=201
+TILE_WIDTH=200
 TILE_HEIGHT=200
 
 # --- Margin/Offset Variables ---

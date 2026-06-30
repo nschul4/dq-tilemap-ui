@@ -30,26 +30,29 @@ mkdir -p "$OUTPUT_DIR"
 IMAGE_WIDTH=$(magick identify -format "%w" "$INPUT_FILE")
 IMAGE_HEIGHT=$(magick identify -format "%h" "$INPUT_FILE")
 
+# --- Tile Dimensions ---
+TILE_WIDTH=200
+TILE_HEIGHT=200
+
 # --- Calculate split position ---
-SPLIT_POSITION=$((IMAGE_WIDTH / 2))
+SPLIT_POSITION=$TILE_WIDTH
 
 # --- Script Execution ---
 
-echo "Splitting $INPUT_FILE down the middle..."
+echo "Splitting $INPUT_FILE..."
 echo "Image dimensions: ${IMAGE_WIDTH}x${IMAGE_HEIGHT} pixels"
 echo "Split position: $SPLIT_POSITION pixels from the left"
 
-# 1. Crop the image into two equal halves
 magick \
 -verbose \
 "$INPUT_FILE" \
--crop "${SPLIT_POSITION}x${IMAGE_HEIGHT}+0+0" +repage \
+-crop "${TILE_WIDTH}x${TILE_HEIGHT}+0+0" +repage \
 "$OUTPUT_DIR/00.png"
 
 magick \
 -verbose \
 "$INPUT_FILE" \
--crop "${SPLIT_POSITION}x${IMAGE_HEIGHT}+${SPLIT_POSITION}+0" +repage \
+-crop "${TILE_WIDTH}x${TILE_HEIGHT}+$((IMAGE_WIDTH - TILE_WIDTH))+0" +repage \
 "$OUTPUT_DIR/01.png"
 
 echo "Done"
