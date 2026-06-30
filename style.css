@@ -17,12 +17,42 @@ body {
 }
 
 .game-container {
+  position: relative;
   width: 100%;
   max-width: 1200px; /* Adjust as needed */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+.game-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./images/original/dcjkc49-ab8e949d-2bbb-430a-a739-4453b836d854.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.game-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.0);
+}
+
+.grid-board, .game-header, .centered-menu {
+  position: relative;
+  z-index: 1;
 }
 
 .game-header {
@@ -49,10 +79,12 @@ body {
   grid-template-rows: repeat(var(--grid-size-rows), 1fr);
   width: 100%;
   max-width: 1000px;
-  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows); /* Enforce aspect ratio based on columns/rows */
-  background-color: #111;
+  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
+  background-color: rgba(0, 0, 0, 0.0);
   border: 4px solid #333;
   gap: 1px;
+  position: relative;
+  z-index: 1;
 }
 
 .tile {
@@ -81,8 +113,12 @@ body {
   outline: 2px solid #4f9bfd;
 }
 
-/* CSS UI representation using background images */
-.tile[data-terrain="unset"] { background-color: #616161; opacity: 0.7; }
+.tile[data-terrain="unset"] {
+  background-color: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  opacity: 0.5;
+}
+
 .tile[data-terrain="dungeon-room"] {
   background-color: #5d4037;
 }
