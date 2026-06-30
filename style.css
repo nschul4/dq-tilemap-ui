@@ -16,14 +16,27 @@ body {
   padding: 20px;
 }
 
+:root {
+  --tile-native-size: 200px;
+  --grid-size-cols: 13;
+  --grid-size-rows: 10;
+
+  /* 1. Pre-defining nudge offsets (defaulting to 0) */
+  --grid-nudge-x: 0px;
+  --grid-nudge-y: 0px;
+}
+
 .game-container {
+  /* Establish base size based entirely on native tile dimensions */
+  width: calc(var(--grid-size-cols) * var(--tile-native-size));
+  max-width: 100%;
+
+  /* 2. Force height to scale dynamically using aspect-ratio */
+  height: auto;
+  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
+
   position: relative;
-  width: 100%;
-  max-width: 1200px; /* Adjust as needed */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  overflow: hidden; /* Prevents nudged elements from clipping layout boundaries */
 }
 
 .game-background {
@@ -33,48 +46,23 @@ body {
   width: 100%;
   height: 100%;
   background-image: url('./images/original/dcjkc49-ab8e949d-2bbb-430a-a739-4453b836d854.png');
-  background-size: cover;
-  background-position: center;
+  /* 3. contain ensures the background image matches the exact aspect ratio bounds */
+  background-size: contain;
   background-repeat: no-repeat;
   z-index: -1;
   opacity: 0.9;
 }
 
-.grid-board, .game-header, .centered-menu {
-  position: relative;
-  z-index: 1;
-}
-
-.game-header {
-  text-align: center;
-}
-
-.game-header h1 {
-  font-size: 24px;
-  color: #4f9bfd;
-  margin-bottom: 6px;
-}
-
-.game-header p {
-  font-size: 14px;
-  color: #aaa;
-  margin-bottom: 12px;
-}
-
 .grid-board {
-  --grid-size-cols: 13;
-  --grid-size-rows: 10;
   display: grid;
   grid-template-columns: repeat(var(--grid-size-cols), 1fr);
   grid-template-rows: repeat(var(--grid-size-rows), 1fr);
   width: 100%;
-  max-width: 1000px;
-  aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
-  background-color: rgba(0, 0, 0, 0.0);
-  border: 4px solid #333;
-  gap: 0px;
+  height: 100%;
+
+  /* 4. Implement nudge transformations */
+  transform: translate(var(--grid-nudge-x), var(--grid-nudge-y));
   position: relative;
-  z-index: 1;
 }
 
 .tile[data-terrain="unset"] {
