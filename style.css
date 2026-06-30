@@ -72,8 +72,8 @@ body {
 }
 
 .grid-board {
-  --grid-size-cols: 10;
-  --grid-size-rows: 13;
+  --grid-size-cols: 13;
+  --grid-size-rows: 10;
   display: grid;
   grid-template-columns: repeat(var(--grid-size-cols), 1fr);
   grid-template-rows: repeat(var(--grid-size-rows), 1fr);
