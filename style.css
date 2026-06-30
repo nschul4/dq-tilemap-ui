@@ -22,8 +22,8 @@ body {
   --grid-size-rows: 10;
 
   /* Your nudge offsets can now be adjusted independently */
-  --grid-nudge-x: 0px;
-  --grid-nudge-y: 0px;
+  --grid-nudge-x: 200px;
+  --grid-nudge-y: 500px;
 }
 
 /* 1. The container just acts as a neutral positioning stage */
