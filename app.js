@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeTile = null;
   let clickedRow = null;
   let clickedCol = null;
+  let clickTimeout = null;
 
   function initGrid() {
     const fragment = document.createDocumentFragment();
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tile.dataset.row = r;
         tile.dataset.col = c;
+        tile.dataset.terrain = 'unset'; // Explicitly set to match CSS styling rules
 
         fragment.appendChild(tile);
       }
@@ -38,22 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.showModal();
   }
 
-  board.addEventListener('click', (e) => {
-    const tile = e.target.closest('.tile');
-    if (!tile) return;
-    openTileMenu(tile);
-  });
-
-  // Handle right-click rotation
-  board.addEventListener('contextmenu', (e) => {
-    const tile = e.target.closest('.tile');
-    if (!tile || tile.dataset.terrain === 'unset') return;
-
-    e.preventDefault(); // Block native browser context menu
-
+  function rotateTile(tile, event) {
     let currentRotation = parseInt(tile.dataset.rotation, 10) || 0;
 
-    if (e.shiftKey || e.ctrlKey) {
+    if (event.shiftKey || event.ctrlKey) {
       currentRotation -= 90; // Counter-clockwise
     } else {
       currentRotation += 90; // Clockwise
@@ -61,15 +51,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tile.dataset.rotation = currentRotation;
     tile.style.setProperty('--tile-rotation', `${currentRotation}deg`);
+  }
+
+  // Handle Single Left Clicks
+  board.addEventListener('click', (e) => {
+    const tile = e.target.closest('.tile');
+    if (!tile) return;
+
+    const isSet = !!tile.dataset.variant;
+
+    if (!isSet) {
+      // Empty tile: immediately open the menu
+      openTileMenu(tile);
+    } else {
+      // Placed tile: delay execution to differentiate from a double click
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+      }
+
+      clickTimeout = setTimeout(() => {
+        rotateTile(tile, e);
+        clickTimeout = null;
+      }, 200); // 200ms window for a double-click to register
+    }
   });
 
+  // Handle Double Left Clicks (Only on already placed tiles)
+  board.addEventListener('dblclick', (e) => {
+    const tile = e.target.closest('.tile');
+    if (!tile) return;
+
+    const isSet = !!tile.dataset.variant;
+    if (isSet) {
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+      }
+      openTileMenu(tile);
+    }
+  });
+
+  // Right clicking does nothing (Prevents default context menu entirely)
+  board.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+  });
+
+  // Keep accessibility sync'd with the new mouse logic
   board.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const tile = e.target.closest('.tile');
       if (!tile) return;
 
       e.preventDefault();
-      openTileMenu(tile);
+      const isSet = !!tile.dataset.variant;
+      
+      if (!isSet) {
+        openTileMenu(tile);
+      } else {
+        rotateTile(tile, e);
+      }
     }
   });
 
@@ -81,24 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const newTerrain = menu.returnValue;
 
     if (newTerrain === 'unset') {
+      targetTile.dataset.terrain = 'unset';
       delete targetTile.dataset.variant;
       delete targetTile.dataset.rotation;
       targetTile.style.backgroundImage = '';
       targetTile.style.removeProperty('--tile-rotation');
     } else {
+      delete targetTile.dataset.terrain;
       targetTile.dataset.variant = newTerrain;
       const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
       targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
     }
-
-    const r = parseInt(clickedRow, 10) + 1;
-    const c = parseInt(clickedCol, 10) + 1;
-    const formattedTerrain = !targetTile.dataset.variant
-      ? 'Unset'
-      : targetTile.dataset.variant
-        .replace(/-variant-\d+$/, '')
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, char => char.toUpperCase());
   });
 
   cancelBtn.addEventListener('click', () => {
