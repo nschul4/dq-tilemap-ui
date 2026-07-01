@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         tile.dataset.row = r;
         tile.dataset.col = c;
-        tile.dataset.terrain = 'unset';
-        tile.dataset.owner = 'none';
         
         fragment.appendChild(tile);
       }
@@ -76,34 +74,31 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   menu.addEventListener('close', () => {
-    if (menu.returnValue) {
-      const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
-      const newTerrain = menu.returnValue;
+    if (!menu.returnValue)
+      return;
 
-      if (newTerrain === 'unset') {
-        targetTile.dataset.terrain = 'unset';
-        delete targetTile.dataset.variant;
-        delete targetTile.dataset.rotation;
-        targetTile.style.backgroundImage = '';
-        targetTile.style.removeProperty('--tile-rotation');
-      } else {
-        const baseTerrain = newTerrain.replace(/-variant-\d+$/, '');
-        targetTile.dataset.terrain = baseTerrain;
-        targetTile.dataset.variant = newTerrain;
+    const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
+    const newTerrain = menu.returnValue;
 
-        const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
-        targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
-      }
-
-      // Update ARIA label and focus
-      const r = parseInt(clickedRow, 10) + 1;
-      const c = parseInt(clickedCol, 10) + 1;
-      const formattedTerrain = targetTile.dataset.terrain === 'unset'
-        ? 'Unset'
-        : targetTile.dataset.terrain.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-      targetTile.setAttribute('aria-label', `${formattedTerrain} tile at row ${r}, column ${c}`);
-      targetTile.focus(); // Return focus to the tile
+    if (newTerrain === 'unset') {
+      delete targetTile.dataset.variant;
+      delete targetTile.dataset.rotation;
+      targetTile.style.backgroundImage = '';
+      targetTile.style.removeProperty('--tile-rotation');
+    } else {
+      targetTile.dataset.variant = newTerrain;
+      const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
+      targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
     }
+
+    const r = parseInt(clickedRow, 10) + 1;
+    const c = parseInt(clickedCol, 10) + 1;
+    const formattedTerrain = !targetTile.dataset.variant
+      ? 'Unset'
+      : targetTile.dataset.variant
+        .replace(/-variant-\d+$/, '')
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, char => char.toUpperCase());
   });
 
   cancelBtn.addEventListener('click', () => {

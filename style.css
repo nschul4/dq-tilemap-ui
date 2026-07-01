@@ -38,12 +38,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  
-  /* Strip away width: 100% or height: 100%.
-     This forces the browser to display the image file at its literal, original pixel dimensions. */
-  width: auto;
-  height: auto;
-  
   pointer-events: none;
   opacity: 0.9;
   z-index: 1;
@@ -72,6 +66,7 @@ body {
 .tile[data-terrain="unset"] {
   background-color: transparent;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
   opacity: 0.5;
 }
 
@@ -98,62 +93,7 @@ body {
   outline: 2px solid #4f9bfd;
 }
 
-.tile[data-terrain="unset"] {
-  background-color: transparent;
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  opacity: 0.5;
-}
-
-.tile[data-terrain="dungeon-room"] {
-  background-color: #5d4037;
-}
-.tile[data-terrain="bottomless-pit"] {
-  background-color: #263238;
-}
-.tile[data-terrain="catacomb-entrance"] {
-  background-color: #4e342e;
-}
-.tile[data-terrain="trap-room"] {
-  background-color: #6d4c41;
-}
-.tile[data-terrain="tower-room"] {
-  background-color: #795548;
-}
-.tile[data-terrain="chamber-of-darkness"] {
-   background-color: #37474f;
-}
-.tile[data-terrain="treasure-chamber"] {
-  background-color: #ff8f00;
-}
-.tile[data-terrain="corridor"] {
-  background-color: #616161;
-}
-.tile[data-terrain="chasm"] {
-  background-color: #424242;
-}
-.tile[data-terrain="cave-in"] {
-  background-color: #546e7a;
-}
-.tile[data-terrain="bridge"] {
-  background-color: #8d6e63;
-}
-.tile[data-terrain="rotating-room"] {
-  background-color: #6d4c41;
-}
-
 .option-unset .icon { color: #616161; }
-.option-dungeon-room .icon { color: #5d4037; }
-.option-bottomless-pit .icon { color: #263238; }
-.option-catacomb-entrance .icon { color: #4e342e; }
-.option-trap-room .icon { color: #6d4c41; }
-.option-tower-room .icon { color: #795548; }
-.option-chamber-of-darkness .icon { color: #37474f; }
-.option-treasure-chamber .icon { color: #ff8f00; }
-.option-corridor .icon { color: #616161; }
-.option-chasm .icon { color: #424242; }
-.option-cave-in .icon { color: #546e7a; }
-.option-bridge .icon { color: #8d6e63; }
-.option-rotating-room .icon { color: #6d4c41; }
 
 .options-container {
   display: flex;
@@ -186,19 +126,6 @@ body {
   overflow-y: visible;
 }
 
-.tile-variants::-webkit-scrollbar {
-  display: none;
-}
-
-.tile-variants::-webkit-scrollbar-thumb {
-  background: #4a4a57;
-  border-radius: 3px;
-}
-
-.tile-variants::-webkit-scrollbar-track {
-  background: #3a3a45;
-}
-
 .tile-option {
   display: flex;
   align-items: center;
@@ -225,11 +152,6 @@ body {
 .tile-option:hover {
   background: #4a4a57;
   border-color: #666;
-}
-
-/* Stateful UI accents via ownership data-attributes */
-.tile[data-owner="player-1"] {
-  outline: 2px inset #ffeb3b;
 }
 
 /* Native Dialog Styling - Perfectly Centered */
