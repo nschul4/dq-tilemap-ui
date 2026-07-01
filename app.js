@@ -17,14 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let c = 0; c < GRID_COLS; c++) {
         const tile = document.createElement('div');
         tile.classList.add('tile');
-        
+
         tile.setAttribute('role', 'button');
         tile.setAttribute('tabindex', '0');
         tile.setAttribute('aria-label', `Unset tile at row ${r + 1}, column ${c + 1}`);
-        
+
         tile.dataset.row = r;
         tile.dataset.col = c;
-        
+
         fragment.appendChild(tile);
       }
     }
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter' || e.key === ' ') {
       const tile = e.target.closest('.tile');
       if (!tile) return;
-      
-      e.preventDefault(); 
+
+      e.preventDefault();
       openTileMenu(tile);
     }
   });

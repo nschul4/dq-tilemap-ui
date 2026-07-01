@@ -1,5 +1,7 @@
 /* Global resets & box model protection */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -29,8 +31,10 @@ body {
 /* 1. The container just acts as a neutral positioning stage */
 .game-container {
   position: relative;
-  width: calc(var(--grid-size-cols) * var(--tile-native-size)); /* 2600px */
-  height: calc(var(--grid-size-rows) * var(--tile-native-size)); /* 2000px */
+  width: calc(var(--grid-size-cols) * var(--tile-native-size));
+  /* 2600px */
+  height: calc(var(--grid-size-rows) * var(--tile-native-size));
+  /* 2000px */
 }
 
 /* 2. COMPLETELY DECOUPLED BACKGROUND LAYER */
@@ -48,15 +52,17 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  
+
   /* Hardcode the grid dimensions to exactly match the 200px tiles */
-  width: calc(var(--grid-size-cols) * var(--tile-native-size));  /* 2600px */
-  height: calc(var(--grid-size-rows) * var(--tile-native-size)); /* 2000px */
-  
+  width: calc(var(--grid-size-cols) * var(--tile-native-size));
+  /* 2600px */
+  height: calc(var(--grid-size-rows) * var(--tile-native-size));
+  /* 2000px */
+
   display: grid;
   grid-template-columns: repeat(var(--grid-size-cols), var(--tile-native-size));
   grid-template-rows: repeat(var(--grid-size-rows), var(--tile-native-size));
-  
+
   z-index: 2;
 
   /* This will shift ONLY the HTML grid over the completely unlinked background image */
@@ -93,7 +99,9 @@ body {
   outline: 2px solid #4f9bfd;
 }
 
-.option-unset .icon { color: #616161; }
+.option-unset .icon {
+  color: #616161;
+}
 
 .options-container {
   display: flex;
@@ -162,7 +170,7 @@ body {
   color: #fff;
   padding: 24px;
   width: 450px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   margin: auto;
 }
 
@@ -214,6 +222,7 @@ body {
   font-size: 13px;
   padding: 4px;
 }
+
 .cancel-btn:hover {
   color: #fff;
   text-decoration: underline;
