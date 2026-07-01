@@ -64,31 +64,32 @@ document.addEventListener('DOMContentLoaded', () => {
       // Empty tile: immediately open the menu
       openTileMenu(tile);
     } else {
-      // Placed tile: delay execution to differentiate from a double click
+      // Placed tile: delay menu opening to check if a double-click (rotation) is intended
       if (clickTimeout) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
       }
 
       clickTimeout = setTimeout(() => {
-        rotateTile(tile, e);
+        openTileMenu(tile);
         clickTimeout = null;
-      }, 200); // 200ms window for a double-click to register
+      }, 200); // 200ms window for a double-click to register instead
     }
   });
 
-  // Handle Double Left Clicks (Only on already placed tiles)
+  // Handle Double Left Clicks
   board.addEventListener('dblclick', (e) => {
     const tile = e.target.closest('.tile');
     if (!tile) return;
 
     const isSet = !!tile.dataset.variant;
     if (isSet) {
+      // Intercept and clear the single-click menu timeout, then rotate
       if (clickTimeout) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
       }
-      openTileMenu(tile);
+      rotateTile(tile, e);
     }
   });
 
@@ -97,20 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
   });
 
-  // Keep accessibility sync'd with the new mouse logic
+  // Keep accessibility sync'd with the new interaction logic
   board.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const tile = e.target.closest('.tile');
       if (!tile) return;
 
       e.preventDefault();
-      const isSet = !!tile.dataset.variant;
-      
-      if (!isSet) {
-        openTileMenu(tile);
-      } else {
-        rotateTile(tile, e);
-      }
+      // Both empty and placed tiles now open the selection menu on primary action
+      openTileMenu(tile);
     }
   });
 
