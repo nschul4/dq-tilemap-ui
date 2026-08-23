@@ -1,3 +1,5 @@
+# dq-tilemap-ui
+
 ## Project Overview
 
 I am designing a web-based board game using the browser DOM, where the game board will always be a perfect square grid with a constant size. Before writing code, I need to map out the technical design.
