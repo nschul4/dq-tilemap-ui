@@ -1,0 +1,34 @@
+# dq-tilemap-ui
+
+A DOM-driven web engine and interactive board builder for game tiles based on *DungeonQuest* (*Drakborgen*). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state directly inside DOM attributes rather than in-memory state arrays.
+
+---
+
+## Key Features
+
+* **DOM-as-State Architecture**: Stores cell variables (terrain, variant, rotation angle) directly on element `data-*` attributes (`data-row`, `data-col`, `data-variant`, `data-rotation`).
+* **Interactive Tile Editing**: Left-click empty cells to open a native HTML `<dialog>` tile selection palette complete with visual icon previews grouped by chamber category.
+* **Rotation Mechanics**: Double-click placed tiles to instantly rotate them clockwise ($90^\circ$ increments), or hold `Shift`/`Ctrl` while double-clicking to rotate counter-clockwise.
+* **12 Dungeon Chamber Types**: Full support for standard *DungeonQuest* chamber types (Dungeon Rooms, Bottomless Pits, Catacomb Entrances, Trap Rooms, Chambers of Darkness, Treasure Chambers, Corridors, Chasms, Cave-ins, Bridges, Rotating Rooms, and Tower Rooms).
+* **Decoupled Background Layout**: CSS CSS Grid overlay system allowing pixel-accurate nudging (`--grid-nudge-x`, `--grid-nudge-y`) over a static board background.
+* **Asset Automation Scripts**: Integrated Bash and ImageMagick scripts to automatically process, crop, and slice full-page asset sheets into individual sprite directories.
+
+---
+
+## Controls & Usage
+
+| Action | Input | Description |
+| --- | --- | --- |
+| **Place/Change Tile** | `Single Click` (Unset tile) | Opens the tile selection modal menu. |
+| **Modify Active Tile** | `Single Click` (Placed tile) | Opens the tile selection menu after a 200ms delay. |
+| **Rotate Clockwise** | `Double Click` (Placed tile) | Rotates the tile by $+90^\circ$. |
+| **Rotate Counter-Clockwise** | `Shift` + `Double Click` | Rotates the tile by $-90^\circ$. |
+| **Accessibility Menu** | `Enter` / `Space` | Focuses and triggers the menu on focused tiles. |
+
+---
+
+## Attribution & Provenance
+
+The assets utilized in this project are derived from community artwork created by **Valnar Nightrunner** on the DakkaDakka forums and DeviantArt. This graphics set modernizes components from the original *DungeonQuest* (published by Games Workshop and Fantasy Flight Games) and *Drakborgen* (1985).
+
+*Note: This repository is an open-source, non-commercial fan implementation. All intellectual property rights belong to their respective trademark holders.*
