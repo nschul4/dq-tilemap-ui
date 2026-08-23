@@ -1,4 +1,3 @@
-/* Global resets & box model protection */
 *,
 *::before,
 *::after {
@@ -23,12 +22,10 @@ body {
   --grid-size-cols: 13;
   --grid-size-rows: 10;
 
-  /* Your nudge offsets can now be adjusted independently */
   --grid-nudge-x: 200px;
   --grid-nudge-y: 500px;
 }
 
-/* 1. The container just acts as a neutral positioning stage */
 .game-container {
   position: relative;
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
@@ -37,7 +34,6 @@ body {
   /* 2000px */
 }
 
-/* 2. COMPLETELY DECOUPLED BACKGROUND LAYER */
 .game-background-img {
   position: absolute;
   top: 0;
@@ -47,13 +43,11 @@ body {
   z-index: 1;
 }
 
-/* 3. COMPLETELY DECOUPLED HTML GRID LAYER */
 .grid-board {
   position: absolute;
   top: 0;
   left: 0;
 
-  /* Hardcode the grid dimensions to exactly match the 200px tiles */
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
   /* 2600px */
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
@@ -65,7 +59,6 @@ body {
 
   z-index: 2;
 
-  /* This will shift ONLY the HTML grid over the completely unlinked background image */
   transform: translate(var(--grid-nudge-x), var(--grid-nudge-y));
 }
 
@@ -86,7 +79,6 @@ body {
   transform: scale(var(--tile-scale, 1)) rotate(var(--tile-rotation, 0deg));
 }
 
-/* Grouping hover and keyboard focus states for uniform accessibility */
 .tile:hover,
 .tile:focus-visible {
   --tile-scale: 1.05;
@@ -94,7 +86,6 @@ body {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
-/* Highlight tile when focus is gained strictly via keyboard navigation */
 .tile:focus-visible {
   outline: 2px solid #4f9bfd;
 }
@@ -162,7 +153,6 @@ body {
   border-color: #666;
 }
 
-/* Native Dialog Styling - Perfectly Centered */
 .centered-menu {
   border: none;
   border-radius: 8px;
