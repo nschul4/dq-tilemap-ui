@@ -9,7 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeTile = null;
   let clickedRow = null;
   let clickedCol = null;
-  let clickTimeout = null;
+
+  let currentHoldTile = null;
+  let holdTimer = null;
+  let isHoldAction = false;
+  let isCounterClockwise = false;
+
+  const HOLD_DELAY = 350;
+  window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.shiftKey) {
+      isCounterClockwise = true;
+    }
+  });
+
+  window.addEventListener('keyup', (e) => {
+    if (!e.ctrlKey && !e.shiftKey) {
+      isCounterClockwise = false;
+    }
+  });
 
   function initGrid() {
     const fragment = document.createDocumentFragment();
@@ -53,44 +70,50 @@ document.addEventListener('DOMContentLoaded', () => {
     tile.style.setProperty('--tile-rotation', `${currentRotation}deg`);
   }
 
-  // Handle Single Left Clicks
+  function triggerHoldRotation() {
+    if (!currentHoldTile) return;
+
+    isHoldAction = true;
+    rotateTile(currentHoldTile, { ctrlKey: isCounterClockwise });
+
+    holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
+  }
+
+  function stopHoldRotation() {
+    if (holdTimer) {
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+    currentHoldTile = null;
+  }
+
+  board.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return; // Left click only
+
+    const tile = e.target.closest('.tile');
+    if (!tile || !tile.dataset.variant) return;
+
+    currentHoldTile = tile;
+    isHoldAction = false;
+    isCounterClockwise = e.ctrlKey || e.shiftKey;
+
+    holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
+  });
+
+  board.addEventListener('mouseup', stopHoldRotation);
+  board.addEventListener('mouseleave', stopHoldRotation);
+
+  // Handle Left Clicks (Open Selection Menu)
   board.addEventListener('click', (e) => {
     const tile = e.target.closest('.tile');
     if (!tile) return;
 
-    const isSet = !!tile.dataset.variant;
-
-    if (!isSet) {
-      // Empty tile: immediately open the menu
-      openTileMenu(tile);
-    } else {
-      // Placed tile: delay menu opening to check if a double-click (rotation) is intended
-      if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-      }
-
-      clickTimeout = setTimeout(() => {
-        openTileMenu(tile);
-        clickTimeout = null;
-      }, 200); // 200ms window for a double-click to register instead
+    if (isHoldAction) {
+      isHoldAction = false;
+      return;
     }
-  });
 
-  // Handle Double Left Clicks
-  board.addEventListener('dblclick', (e) => {
-    const tile = e.target.closest('.tile');
-    if (!tile) return;
-
-    const isSet = !!tile.dataset.variant;
-    if (isSet) {
-      // Intercept and clear the single-click menu timeout, then rotate
-      if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-      }
-      rotateTile(tile, e);
-    }
+    openTileMenu(tile);
   });
 
   // Right clicking does nothing (Prevents default context menu entirely)
@@ -98,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
   });
 
-  // Keep accessibility sync'd with the new interaction logic
+  // Keep accessibility sync'd with interaction logic
   board.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const tile = e.target.closest('.tile');
