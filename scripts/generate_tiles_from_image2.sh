@@ -25,21 +25,21 @@ OUTPUT_DIR=$2
 # --- Ensure output directory exists ---
 mkdir -p "$OUTPUT_DIR"
 
+# --- Tile Dimensions ---
+TILE_WIDTH=200
+TILE_HEIGHT=200
+
 # --- Image Dimensions ---
 # Get image width and height using ImageMagick
 IMAGE_WIDTH=$(magick identify -format "%w" "$INPUT_FILE")
 IMAGE_HEIGHT=$(magick identify -format "%h" "$INPUT_FILE")
-
-# --- Tile Dimensions ---
-TILE_WIDTH=200
-TILE_HEIGHT=200
 
 # --- Calculate split position ---
 SPLIT_POSITION=$TILE_WIDTH
 
 # --- Script Execution ---
 
-echo "Splitting $INPUT_FILE..."
+echo "Processing tiles from $INPUT_FILE..."
 echo "Image dimensions: ${IMAGE_WIDTH}x${IMAGE_HEIGHT} pixels"
 echo "Split position: $SPLIT_POSITION pixels from the left"
 
