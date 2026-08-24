@@ -16,16 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let isCounterClockwise = false;
 
   const HOLD_DELAY = 350;
-  window.addEventListener('keydown', (e) => {
-    if (e.ctrlKey || e.shiftKey) {
-      isCounterClockwise = true;
-    }
-  });
 
-  window.addEventListener('keyup', (e) => {
-    if (!e.ctrlKey && !e.shiftKey) {
-      isCounterClockwise = false;
-    }
+  function updateModifierState(e) {
+    isCounterClockwise = !!(e.shiftKey || e.ctrlKey);
+  }
+
+  window.addEventListener('keydown', updateModifierState);
+  window.addEventListener('keyup', updateModifierState);
+
+  window.addEventListener('blur', () => {
+    isCounterClockwise = false;
+    stopHoldRotation();
+    isHoldAction = false;
   });
 
   function initGrid() {
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     activeTile = tile;
     clickedRow = tile.dataset.row;
     clickedCol = tile.dataset.col;
+    menu.returnValue = '';
     menu.showModal();
   }
 
@@ -101,7 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   board.addEventListener('mouseup', stopHoldRotation);
-  board.addEventListener('mouseleave', stopHoldRotation);
+  board.addEventListener('mouseleave', () => {
+    stopHoldRotation();
+    isHoldAction = false;
+  });
 
   // Handle Left Clicks (Open Selection Menu)
   board.addEventListener('click', (e) => {
@@ -128,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!tile) return;
 
       e.preventDefault();
-      // Both empty and placed tiles now open the selection menu on primary action
       openTileMenu(tile);
     }
   });
@@ -139,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
     const newTerrain = menu.returnValue;
+    const rowNum = parseInt(clickedRow, 10) + 1;
+    const colNum = parseInt(clickedCol, 10) + 1;
 
     if (newTerrain === 'unset') {
       targetTile.dataset.terrain = 'unset';
@@ -146,11 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
       delete targetTile.dataset.rotation;
       targetTile.style.backgroundImage = '';
       targetTile.style.removeProperty('--tile-rotation');
+      targetTile.setAttribute('aria-label', `Unset tile at row ${rowNum}, column ${colNum}`);
     } else {
       delete targetTile.dataset.terrain;
       targetTile.dataset.variant = newTerrain;
       const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
       targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
+
+      const formattedName = newTerrain.replace(/-/g, ' ');
+      targetTile.setAttribute('aria-label', `${formattedName} at row ${rowNum}, column ${colNum}`);
     }
   });
 
