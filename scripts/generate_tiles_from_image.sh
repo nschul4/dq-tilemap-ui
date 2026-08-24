@@ -22,6 +22,10 @@ fi
 INPUT_FILE=$1
 OUTPUT_DIR=$2
 
+# --- Ensure output directory exists ---
+mkdir -p "$OUTPUT_DIR"
+
+# --- Tile Dimensions ---
 TILE_WIDTH=200
 TILE_HEIGHT=200
 
@@ -29,6 +33,7 @@ TILE_HEIGHT=200
 # How many pixels to chop off the Left (X) and Top (Y) before slicing
 START_X=63
 START_Y=30
+
 # --- Grid Constraints (To prevent overflow tiles) ---
 COLUMNS=5
 ROWS=3
