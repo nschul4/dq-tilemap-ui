@@ -19,11 +19,10 @@ A DOM-driven web engine and interactive board builder for game tiles based on *D
 
 | Action | Input | Description |
 | --- | --- | --- |
-| **Place/Change Tile** | `Single Click` (Unset tile) | Opens the tile selection modal menu. |
-| **Modify Active Tile** | `Single Click` (Placed tile) | Opens the tile selection menu after a 200ms delay. |
-| **Rotate Clockwise** | `Double Click` (Placed tile) | Rotates the tile by $+90^\circ$. |
-| **Rotate Counter-Clockwise** | `Shift` + `Double Click` | Rotates the tile by $-90^\circ$. |
-| **Accessibility Menu** | `Enter` / `Space` | Focuses and triggers the menu on focused tiles. |
+| **Place / Modify Tile** | `Single Click` (Any tile) | Opens the tile selection modal menu. |
+| **Rotate Clockwise** | `Click & Hold` (Placed tile) | Presses and holds left-click to rotate the tile +90° continuously. |
+| **Rotate Counter-Clockwise** | `Shift` / `Ctrl` + `Click & Hold` | Holds `Shift` or `Ctrl` while holding left-click to rotate -90° continuously. |
+| **Accessibility Menu** | `Enter` / `Space` | Triggers the tile selection menu on the currently focused tile. |
 
 ---
 
