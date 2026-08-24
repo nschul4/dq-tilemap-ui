@@ -8,9 +8,9 @@ A DOM-driven web engine and interactive board builder for game tiles based on *D
 
 * **DOM-as-State Architecture**: Stores cell variables (terrain, variant, rotation angle) directly on element `data-*` attributes (`data-row`, `data-col`, `data-variant`, `data-rotation`).
 * **Interactive Tile Editing**: Left-click empty cells to open a native HTML `<dialog>` tile selection palette complete with visual icon previews grouped by chamber category.
-* **Rotation Mechanics**: Double-click placed tiles to instantly rotate them clockwise ($90^\circ$ increments), or hold `Shift`/`Ctrl` while double-clicking to rotate counter-clockwise.
+* **Rotation Mechanics**: Click and hold placed tiles to rotate them clockwise (+90° increments), or hold `Shift` / `Ctrl` while clicking and holding to rotate counter-clockwise.
 * **12 Dungeon Chamber Types**: Full support for standard *DungeonQuest* chamber types (Dungeon Rooms, Bottomless Pits, Catacomb Entrances, Trap Rooms, Chambers of Darkness, Treasure Chambers, Corridors, Chasms, Cave-ins, Bridges, Rotating Rooms, and Tower Rooms).
-* **Decoupled Background Layout**: CSS CSS Grid overlay system allowing pixel-accurate nudging (`--grid-nudge-x`, `--grid-nudge-y`) over a static board background.
+* **Decoupled Background Layout**: CSS Grid overlay system allowing pixel-accurate nudging (`--grid-nudge-x`, `--grid-nudge-y`) over a static board background.
 * **Asset Automation Scripts**: Integrated Bash and ImageMagick scripts to automatically process, crop, and slice full-page asset sheets into individual sprite directories.
 
 ---
