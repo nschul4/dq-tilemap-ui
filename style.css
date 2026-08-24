@@ -24,14 +24,15 @@ body {
 
   --grid-nudge-x: 200px;
   --grid-nudge-y: 500px;
+  --board-scale: 0.4;
 }
 
 .game-container {
   position: relative;
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
-  /* 2600px */
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
-  /* 2000px */
+  zoom: var(--board-scale);
+  transform-origin: center center;
 }
 
 .game-background-img {
@@ -159,7 +160,8 @@ body {
   background: #2a2a32;
   color: #fff;
   padding: 24px;
-  width: 525px;
+  width: 550px;
+  max-width: 90vw;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   margin: auto;
 }
