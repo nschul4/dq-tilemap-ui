@@ -1,3 +1,46 @@
+function renderTileMenu() {
+  const container = document.getElementById('options-container');
+  if (!container || typeof TILES_DATA === 'undefined') return;
+
+  const fragment = document.createDocumentFragment();
+
+  TILES_DATA.forEach(group => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'tile-category';
+
+    const title = document.createElement('h4');
+    title.textContent = group.category;
+    categoryDiv.appendChild(title);
+
+    const variantsDiv = document.createElement('div');
+    variantsDiv.className = 'tile-variants';
+
+    group.variants.forEach(variant => {
+      const btn = document.createElement('button');
+      btn.type = 'submit';
+      btn.name = 'terrain';
+      btn.className = 'tile-option';
+
+      btn.value = variant.name.toLowerCase().replace(/\s+/g, '-');
+      btn.title = variant.name;
+
+      const img = document.createElement('img');
+      img.src = variant.src;
+      img.alt = variant.name;
+
+      btn.appendChild(img);
+      variantsDiv.appendChild(btn);
+    });
+
+    categoryDiv.appendChild(variantsDiv);
+    fragment.appendChild(categoryDiv);
+  });
+
+  container.appendChild(fragment);
+}
+
+document.addEventListener('DOMContentLoaded', renderTileMenu);
+
 document.addEventListener('DOMContentLoaded', () => {
   const board = document.getElementById('game-board');
   const menu = document.getElementById('tile-menu');
