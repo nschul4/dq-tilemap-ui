@@ -1,3 +1,5 @@
+console.log('dq-tilemap-ui v1.0.0 - https://github.com/nschul4/dq-tilemap-ui');
+
 function renderTileMenu() {
   const container = document.getElementById('options-container');
   if (!container || typeof TILES_DATA === 'undefined') return;
