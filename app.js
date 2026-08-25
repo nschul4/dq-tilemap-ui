@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let isHoldAction = false;
   let isCounterClockwise = false;
 
+  let pointerStartX = 0;
+  let pointerStartY = 0;
+  const MOVE_THRESHOLD = 10;
   const HOLD_DELAY = 350;
 
   function updateModifierState(e) {
@@ -133,24 +136,52 @@ document.addEventListener('DOMContentLoaded', () => {
     currentHoldTile = null;
   }
 
-  board.addEventListener('mousedown', (e) => {
-    if (e.button !== 0) return; // Left click only
+  function onPointerDown(e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
 
     const tile = e.target.closest('.tile');
     if (!tile || !tile.dataset.variant) return;
 
     currentHoldTile = tile;
     isHoldAction = false;
-    isCounterClockwise = e.ctrlKey || e.shiftKey;
+    isCounterClockwise = !!(e.ctrlKey || e.shiftKey) || isCounterClockwise;
+
+    pointerStartX = e.clientX;
+    pointerStartY = e.clientY;
+
+    if (e.pointerId != null && tile.setPointerCapture) {
+      try { tile.setPointerCapture(e.pointerId); } catch (err) {}
+    }
 
     holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
-  });
+  }
 
-  board.addEventListener('mouseup', stopHoldRotation);
-  board.addEventListener('mouseleave', () => {
+  function onPointerMove(e) {
+    if (!currentHoldTile || !holdTimer) return;
+
+    const dx = Math.abs(e.clientX - pointerStartX);
+    const dy = Math.abs(e.clientY - pointerStartY);
+    if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD) {
+      stopHoldRotation();
+    }
+  }
+
+  function onPointerUp(e) {
+    if (currentHoldTile && e.pointerId != null && currentHoldTile.releasePointerCapture) {
+      try { currentHoldTile.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+    stopHoldRotation();
+  }
+
+  function onPointerCancel() {
     stopHoldRotation();
     isHoldAction = false;
-  });
+  }
+
+  board.addEventListener('pointerdown', onPointerDown);
+  board.addEventListener('pointermove', onPointerMove);
+  board.addEventListener('pointerup', onPointerUp);
+  board.addEventListener('pointercancel', onPointerCancel);
 
   // Handle Left Clicks (Open Selection Menu)
   board.addEventListener('click', (e) => {
