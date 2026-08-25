@@ -58,6 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let isHoldAction = false;
   let isCounterClockwise = false;
 
+  // Pointer tracking for touch/mouse
+  let pointerStartX = 0;
+  let pointerStartY = 0;
+  const MOVE_THRESHOLD = 10; // pixels
+
   const HOLD_DELAY = 350;
 
   function updateModifierState(e) {
@@ -120,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!currentHoldTile) return;
 
     isHoldAction = true;
+    // Pass the stored modifier state for direction
     rotateTile(currentHoldTile, { ctrlKey: isCounterClockwise });
 
     holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
@@ -133,24 +139,59 @@ document.addEventListener('DOMContentLoaded', () => {
     currentHoldTile = null;
   }
 
-  board.addEventListener('mousedown', (e) => {
-    if (e.button !== 0) return; // Left click only
+  // Pointer-based handling (works for mouse, touch, stylus)
+  function onPointerDown(e) {
+    // Only primary button for mice; allow touch/pen
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
 
     const tile = e.target.closest('.tile');
     if (!tile || !tile.dataset.variant) return;
 
     currentHoldTile = tile;
     isHoldAction = false;
-    isCounterClockwise = e.ctrlKey || e.shiftKey;
+    // maintain keyboard modifiers if present
+    isCounterClockwise = !!(e.ctrlKey || e.shiftKey) || isCounterClockwise;
+
+    pointerStartX = e.clientX;
+    pointerStartY = e.clientY;
+
+    // Capture pointer so we keep receiving events for this pointer
+    if (e.pointerId != null && board.setPointerCapture) {
+      try { board.setPointerCapture(e.pointerId); } catch (err) {}
+    }
 
     holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
-  });
+  }
 
-  board.addEventListener('mouseup', stopHoldRotation);
-  board.addEventListener('mouseleave', () => {
+  function onPointerMove(e) {
+    if (!currentHoldTile || !holdTimer) return;
+
+    const dx = Math.abs(e.clientX - pointerStartX);
+    const dy = Math.abs(e.clientY - pointerStartY);
+    if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD) {
+      // cancel hold if user moved finger
+      stopHoldRotation();
+    }
+  }
+
+  function onPointerUp(e) {
+    // Release capture
+    if (e.pointerId != null && board.releasePointerCapture) {
+      try { board.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+    stopHoldRotation();
+  }
+
+  function onPointerCancel() {
     stopHoldRotation();
     isHoldAction = false;
-  });
+  }
+
+  board.addEventListener('pointerdown', onPointerDown);
+  board.addEventListener('pointermove', onPointerMove);
+  board.addEventListener('pointerup', onPointerUp);
+  board.addEventListener('pointercancel', onPointerCancel);
+  board.addEventListener('pointerleave', onPointerCancel);
 
   // Handle Left Clicks (Open Selection Menu)
   board.addEventListener('click', (e) => {
