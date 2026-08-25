@@ -78,6 +78,33 @@ document.addEventListener('DOMContentLoaded', () => {
     isHoldAction = false;
   });
 
+  // preserve scroll & focus while a native <dialog> is open (helps Android)
+  let __savedScroll = { x: 0, y: 0 };
+  let __previouslyFocused = null;
+
+  function lockBodyScroll() {
+    __savedScroll.x = window.scrollX || window.pageXOffset || 0;
+    __savedScroll.y = window.scrollY || window.pageYOffset || 0;
+    // Fix the body in place and offset it to preserve visual position
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${__savedScroll.y}px`;
+    document.body.style.left = `-${__savedScroll.x}px`;
+    document.body.style.right = '0';
+  }
+
+  function unlockBodyScroll() {
+    // Remove the fixed positioning
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    // Restore the previous scroll position after a tick (helps on Android)
+    const { x, y } = __savedScroll;
+    setTimeout(() => {
+      window.scrollTo(x, y);
+    }, 0);
+  }
+
   function initGrid() {
     const fragment = document.createDocumentFragment();
 
@@ -105,7 +132,22 @@ document.addEventListener('DOMContentLoaded', () => {
     clickedRow = tile.dataset.row;
     clickedCol = tile.dataset.col;
     menu.returnValue = '';
+
+    // save currently focused element so we can restore focus later
+    __previouslyFocused = document.activeElement;
+
+    // lock background scroll before opening dialog (prevents content shift on mobile)
+    lockBodyScroll();
+
     menu.showModal();
+
+    // focus something inside the dialog without scrolling if possible
+    const focusable = menu.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable && focusable.focus) {
+      try { focusable.focus({ preventScroll: true }); } catch (err) { focusable.focus(); }
+    } else {
+      try { menu.focus({ preventScroll: true }); } catch (err) { /* ignore */ }
+    }
   }
 
   function rotateTile(tile, event) {
@@ -223,6 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   menu.addEventListener('close', () => {
+    // Always unlock body scroll even if returnValue is empty (cancel)
+    unlockBodyScroll();
+
     if (!menu.returnValue)
       return;
 
@@ -250,6 +295,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const formattedName = newTerrain.replace(/-/g, ' ');
       targetTile.setAttribute('aria-label', `${formattedName} at row ${rowNum}, column ${colNum}`);
+    }
+
+    // restore focus to the element that had it before the dialog opened
+    if (__previouslyFocused && __previouslyFocused.focus) {
+      try { __previouslyFocused.focus({ preventScroll: true }); } catch (err) { __previouslyFocused.focus(); }
     }
   });
 
