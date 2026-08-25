@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let pointerStartY = 0;
   const MOVE_THRESHOLD = 10;
   const HOLD_DELAY = 350;
+  let savedScrollX = 0;
+  let savedScrollY = 0;
 
   function updateModifierState(e) {
     isCounterClockwise = !!(e.shiftKey || e.ctrlKey);
@@ -101,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openTileMenu(tile) {
+    savedScrollX = window.scrollX || window.pageXOffset;
+    savedScrollY = window.scrollY || window.pageYOffset;
     activeTile = tile;
     clickedRow = tile.dataset.row;
     clickedCol = tile.dataset.col;
@@ -214,11 +218,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function restoreScrollPosition() {
+    window.scrollTo(savedScrollX, savedScrollY);
+  }
+
   menu.addEventListener('close', () => {
+    const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
+    if (targetTile) {
+      targetTile.focus({ preventScroll: true });
+    }
+
+    restoreScrollPosition();
+    setTimeout(restoreScrollPosition, 0);
+
     if (!menu.returnValue)
       return;
 
-    const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
     const newTerrain = menu.returnValue;
     const rowNum = parseInt(clickedRow, 10) + 1;
     const colNum = parseInt(clickedCol, 10) + 1;
