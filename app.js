@@ -194,14 +194,18 @@ document.addEventListener('DOMContentLoaded', () => {
       targetTile.dataset.terrain = 'unset';
       delete targetTile.dataset.variant;
       delete targetTile.dataset.rotation;
+      targetTile.removeAttribute('title');
       targetTile.style.backgroundImage = '';
       targetTile.style.removeProperty('--tile-rotation');
       targetTile.setAttribute('aria-label', `Unset tile at row ${rowNum}, column ${colNum}`);
     } else {
       delete targetTile.dataset.terrain;
       targetTile.dataset.variant = newTerrain;
-      const variantImg = document.querySelector(`button[value="${newTerrain}"] img`);
+      const variantBtn = document.querySelector(`button[value="${newTerrain}"]`);
+      const variantImg = variantBtn ? variantBtn.querySelector('img') : null;
+
       targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
+      targetTile.title = variantBtn ? variantBtn.title : '';
 
       const formattedName = newTerrain.replace(/-/g, ' ');
       targetTile.setAttribute('aria-label', `${formattedName} at row ${rowNum}, column ${colNum}`);
