@@ -31,8 +31,8 @@ body {
   position: relative;
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
-  zoom: var(--board-scale);
-  transform-origin: center center;
+  transform: scale(var(--board-scale));
+  transform-origin: top center;
 }
 
 .game-background-img {
