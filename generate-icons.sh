@@ -1,2 +1,2 @@
 npm install -D sharp
-node generate-icons.js
+node ./src/generate-icons.js
