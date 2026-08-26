@@ -1,4 +1,4 @@
-const TILES_DATA = [
+export const TILES_DATA = [
   {
     "category": "Dungeon Room",
     "variants": [
