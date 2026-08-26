@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pointerStartY = e.clientY;
 
     if (e.pointerId != null && tile.setPointerCapture) {
-      try { tile.setPointerCapture(e.pointerId); } catch (err) {}
+      try { tile.setPointerCapture(e.pointerId); } catch (err) { }
     }
 
     holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function onPointerUp(e) {
     if (currentHoldTile && e.pointerId != null && currentHoldTile.releasePointerCapture) {
-      try { currentHoldTile.releasePointerCapture(e.pointerId); } catch (err) {}
+      try { currentHoldTile.releasePointerCapture(e.pointerId); } catch (err) { }
     }
     stopHoldRotation();
   }
