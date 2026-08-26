@@ -17,6 +17,7 @@ body {
   align-items: flex-start;
   min-height: 100vh;
   padding: 20px;
+  overflow-x: auto;
 }
 
 :root {
@@ -35,12 +36,16 @@ body {
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
   transform: scale(var(--board-scale));
   transform-origin: top center;
+  margin-bottom: calc(2000px * (var(--board-scale) - 1));
 }
 
 .game-background-img {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: calc(var(--grid-nudge-y) * -1);
+  left: calc(var(--grid-nudge-x) * -1);
+  width: 3000px;
+  height: 2800px;
+  max-width: none;
   pointer-events: none;
   opacity: 0.9;
   z-index: 1;
@@ -52,17 +57,13 @@ body {
   left: 0;
 
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
-  /* 2600px */
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
-  /* 2000px */
 
   display: grid;
   grid-template-columns: repeat(var(--grid-size-cols), var(--tile-native-size));
   grid-template-rows: repeat(var(--grid-size-rows), var(--tile-native-size));
 
   z-index: 2;
-
-  transform: translate(var(--grid-nudge-x), var(--grid-nudge-y));
 }
 
 .tile[data-terrain="unset"] {
@@ -122,12 +123,10 @@ body {
 
 .tile-variants {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   gap: 8px;
   padding: 4px 0;
-  max-width: none;
-  overflow-x: visible;
-  overflow-y: visible;
+  width: 100%;
 }
 
 .tile-option {
@@ -142,8 +141,9 @@ body {
   cursor: pointer;
   font-size: 12px;
   text-align: center;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   transition: background 0.2s;
 }
 
