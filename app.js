@@ -105,12 +105,61 @@ document.addEventListener('DOMContentLoaded', () => {
   function openTileMenu(tile) {
     savedScrollX = window.scrollX || window.pageXOffset;
     savedScrollY = window.scrollY || window.pageYOffset;
+
     activeTile = tile;
     clickedRow = tile.dataset.row;
     clickedCol = tile.dataset.col;
     menu.returnValue = '';
+
     menu.showModal();
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.left = `-${savedScrollX}px`;
+    document.body.style.width = '100%';
   }
+
+  menu.addEventListener('close', () => {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.width = '';
+
+    window.scrollTo(savedScrollX, savedScrollY);
+
+    const targetTile = document.querySelector(`[data-row="${clickedRow}"][data-col="${clickedCol}"]`);
+    if (targetTile) {
+      targetTile.focus({ preventScroll: true });
+    }
+
+    if (!menu.returnValue)
+      return;
+
+    const newTerrain = menu.returnValue;
+    const rowNum = parseInt(clickedRow, 10) + 1;
+    const colNum = parseInt(clickedCol, 10) + 1;
+
+    if (newTerrain === 'unset') {
+      targetTile.dataset.terrain = 'unset';
+      delete targetTile.dataset.variant;
+      delete targetTile.dataset.rotation;
+      targetTile.removeAttribute('title');
+      targetTile.style.backgroundImage = '';
+      targetTile.style.removeProperty('--tile-rotation');
+      targetTile.setAttribute('aria-label', `Unset tile at row ${rowNum}, column ${colNum}`);
+    } else {
+      delete targetTile.dataset.terrain;
+      targetTile.dataset.variant = newTerrain;
+      const variantBtn = document.querySelector(`button[value="${newTerrain}"]`);
+      const variantImg = variantBtn ? variantBtn.querySelector('img') : null;
+
+      targetTile.style.backgroundImage = variantImg ? `url('${variantImg.src}')` : '';
+      targetTile.title = variantBtn ? variantBtn.title : '';
+
+      const formattedName = newTerrain.replace(/-/g, ' ');
+      targetTile.setAttribute('aria-label', `${formattedName} at row ${rowNum}, column ${colNum}`);
+    }
+  });
 
   function rotateTile(tile, event) {
     let currentRotation = parseInt(tile.dataset.rotation, 10) || 0;
