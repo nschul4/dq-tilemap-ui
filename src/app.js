@@ -16,24 +16,8 @@ function initVersionBadge(ver) {
 
   const badge = document.createElement("div");
   badge.id = "version-badge";
+  badge.className = "version-badge";
   badge.textContent = ver;
-
-  Object.assign(badge.style, {
-    position: "fixed",
-    top: "12px",
-    right: "12px",
-    background: "rgba(30, 30, 36, 0.75)",
-    color: "#a0a0b0",
-    border: "1px solid rgba(255, 255, 255, 0.15)",
-    padding: "4px 10px",
-    borderRadius: "12px",
-    fontSize: "11px",
-    fontFamily: "monospace",
-    pointerEvents: "none",
-    zIndex: "10000",
-    backdropFilter: "blur(4px)",
-    webkitBackdropFilter: "blur(4px)",
-  });
 
   document.body.appendChild(badge);
 }

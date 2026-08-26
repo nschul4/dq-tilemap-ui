@@ -223,3 +223,20 @@ body {
   color: #fff;
   text-decoration: underline;
 }
+
+.version-badge {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: rgba(30, 30, 36, 0.75);
+  color: #a0a0b0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-family: monospace;
+  pointer-events: none;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
