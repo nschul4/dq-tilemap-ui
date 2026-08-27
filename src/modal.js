@@ -2,51 +2,47 @@ import { updateTileState } from "./grid.js";
 
 let activeTile = null;
 
-export function openTileMenu(
+export function openTilePalette(
   tile,
-  menu = document.getElementById("tile-menu"),
+  palette = document.getElementById("tile-palette"),
 ) {
-  if (!tile || !menu) return;
-
+  if (!tile || !palette) return;
   activeTile = tile;
-  menu.returnValue = "";
-  menu.showModal();
+  palette.returnValue = "";
+  palette.showModal();
 }
 
 export function initModal(
-  menu = document.getElementById("tile-menu"),
+  palette = document.getElementById("tile-palette"),
   cancelBtn = document.getElementById("menu-cancel"),
 ) {
-  if (!menu) return;
+  if (!palette) return;
 
-  menu.addEventListener("close", () => {
+  palette.addEventListener("close", () => {
+    if (palette.returnValue && activeTile) {
+      updateTileState(activeTile, palette.returnValue);
+    }
+
+    // Return focus without triggering native scroll jumps on mobile
     if (activeTile) {
       activeTile.focus({ preventScroll: true });
     }
-
-    if (menu.returnValue && activeTile) {
-      updateTileState(activeTile, menu.returnValue);
-    }
-
     activeTile = null;
   });
 
-  menu.addEventListener("click", (e) => {
-    const rect = menu.getBoundingClientRect();
-    const isOutside =
+  palette.addEventListener("click", (e) => {
+    const rect = palette.getBoundingClientRect();
+    if (
       e.clientX < rect.left ||
       e.clientX > rect.right ||
       e.clientY < rect.top ||
-      e.clientY > rect.bottom;
-
-    if (isOutside) {
-      menu.close("");
+      e.clientY > rect.bottom
+    ) {
+      palette.close("");
     }
   });
 
   if (cancelBtn) {
-    cancelBtn.addEventListener("click", () => {
-      menu.close("");
-    });
+    cancelBtn.addEventListener("click", () => palette.close(""));
   }
 }

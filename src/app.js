@@ -2,6 +2,7 @@ import { renderTileMenu } from "./menuRenderer.js";
 import { initGrid } from "./grid.js";
 import { initModal } from "./modal.js";
 import { initInteractions } from "./interactions.js";
+import { initMapViewport } from "./viewport.js";
 
 const version = "v1.0.0";
 const projectUrl = "https://github.com/nschul4/dq-tilemap-ui";
@@ -26,6 +27,7 @@ console.log(`dq-tilemap-ui ${version} - ${projectUrl}`);
 
 document.addEventListener("DOMContentLoaded", () => {
   initVersionBadge(version);
+  initMapViewport();
   renderTileMenu();
   initGrid();
   initModal();

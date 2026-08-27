@@ -1,5 +1,5 @@
 import { rotateTile } from "./grid.js";
-import { openTileMenu } from "./modal.js";
+import { openTilePalette } from "./modal.js";
 
 const MOVE_THRESHOLD = 10;
 const HOLD_DELAY = 350;
@@ -90,7 +90,7 @@ export function initInteractions(
       return;
     }
 
-    openTileMenu(tile);
+    openTilePalette(tile);
   });
 
   board.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -101,7 +101,7 @@ export function initInteractions(
       if (!tile) return;
 
       e.preventDefault();
-      openTileMenu(tile);
+      openTilePalette(tile);
     }
   });
 }
