@@ -1,6 +1,6 @@
 # dq-tilemap-ui
 
-A DOM-driven web engine and interactive board builder for game tiles based on *DungeonQuest* (*Drakborgen*). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state directly inside DOM attributes rather than in-memory state arrays.
+A DOM-driven web engine and interactive board builder for game tiles based on _DungeonQuest_ (_Drakborgen_). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state directly inside DOM attributes rather than in-memory state arrays.
 
 This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://www.google.com/search?q=https://nschul4.github.io/dq-tilemap-ui/)
 
@@ -8,12 +8,12 @@ This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://www.goo
 
 ## Key Features
 
-* **DOM-as-State Architecture**: Cell attributes (`data-row`, `data-col`, `data-variant`, `data-rotation`) are stored directly on element nodes.
-* **Cursor-Anchored Viewport Zoom**: Smooth map scaling between 0.5x and 4.0x anchored directly to the mouse pointer position.
-* **Drag-Panning & Interaction Thresholds**: Built-in 6px drag threshold to separate map navigation from tile selection clicks.
-* **Press-and-Hold Tile Rotation**: Continuous tile rotation engine with a 350ms press delay, a 10px movement cancellation threshold, and modifier key support.
-* **Interactive Tile Palette**: Native HTML `<dialog>` selection menu with backdrop click-to-dismiss support.
-* **12 Dungeon Chamber Types**: Support for standard *DungeonQuest* room layouts and hazards.
+- **DOM-as-State Architecture**: Cell attributes (`data-row`, `data-col`, `data-variant`, `data-rotation`) are stored directly on element nodes.
+- **Cursor-Anchored Viewport Zoom**: Smooth map scaling between 0.5x and 4.0x anchored directly to the mouse pointer position.
+- **Drag-Panning & Interaction Thresholds**: Built-in 6px drag threshold to separate map navigation from tile selection clicks.
+- **Press-and-Hold Tile Rotation**: Continuous tile rotation engine with a 350ms press delay, a 10px movement cancellation threshold, and modifier key support.
+- **Interactive Tile Palette**: Native HTML `<dialog>` selection menu with backdrop click-to-dismiss support.
+- **12 Dungeon Chamber Types**: Support for standard _DungeonQuest_ room layouts and hazards.
 
 ---
 
@@ -21,16 +21,16 @@ This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://www.goo
 
 The engine enforces strict pointer input rules to prevent gesture collisions between canvas navigation, modal management, and tile editing.
 
-| Action | Input / Trigger | Threshold / Timing | Logic & Behavioral Constraints |
-| --- | --- | --- | --- |
-| **Zoom Viewport** | `Wheel Scroll` on viewport | $0.5\times$ to $4.0\times$ bounds | Multiplies scale by 1.1x (in) or 0.9x (out) anchored to mouse `clientX`/`clientY` coordinates. |
-| **Pan Canvas** | `Left-Click + Drag` on viewport | $> 6\text{px}$ movement (`PAN_THRESHOLD`) | Updates transform translate offset. Flags `didPan = true` to prevent triggering tile clicks upon release. |
-| **Open Palette** | `Left Click` on tile | Instant (`click`) | Triggers `<dialog>` modal. Suppressed if the pointer action was a canvas pan or hold-rotation. |
-| **Rotate Clockwise** | `Click & Hold` on placed tile | 350ms initial delay, 350ms repeat (`HOLD_DELAY`) | Rotates tile +90° continuously. Applies only to placed tiles containing a `data-variant` attribute. |
-| **Rotate Counter-CW** | `Shift` / `Ctrl` + `Click & Hold`<br> | 350ms initial delay, 350ms repeat | Rotates tile -90° continuously while keyboard modifier keys are pressed. |
-| **Cancel Rotation** | `Mouse Move` during hold press | $> 10\text{px}$ movement (`MOVE_THRESHOLD`) | Clears the hold rotation timer immediately if the pointer strays. |
-| **Dismiss Palette** | `Left Click` outside modal box | Instant (`click`) | Compares click coordinates against `getBoundingClientRect()` to close modal without state changes. |
-| **Suppress Context Menu** | `Right Click` on board | Instant (`contextmenu`) | Executes `preventDefault()` to prevent default browser context menus over the grid. |
+| Action                    | Input / Trigger                       | Threshold / Timing                               | Logic & Behavioral Constraints                                                                            |
+| ------------------------- | ------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| **Zoom Viewport**         | `Wheel Scroll` on viewport            | $0.5\times$ to $4.0\times$ bounds                | Multiplies scale by 1.1x (in) or 0.9x (out) anchored to mouse `clientX`/`clientY` coordinates.            |
+| **Pan Canvas**            | `Left-Click + Drag` on viewport       | $> 6\text{px}$ movement (`PAN_THRESHOLD`)        | Updates transform translate offset. Flags `didPan = true` to prevent triggering tile clicks upon release. |
+| **Open Palette**          | `Left Click` on tile                  | Instant (`click`)                                | Triggers `<dialog>` modal. Suppressed if the pointer action was a canvas pan or hold-rotation.            |
+| **Rotate Clockwise**      | `Click & Hold` on placed tile         | 350ms initial delay, 350ms repeat (`HOLD_DELAY`) | Rotates tile +90° continuously. Applies only to placed tiles containing a `data-variant` attribute.       |
+| **Rotate Counter-CW**     | `Shift` / `Ctrl` + `Click & Hold`<br> | 350ms initial delay, 350ms repeat                | Rotates tile -90° continuously while keyboard modifier keys are pressed.                                  |
+| **Cancel Rotation**       | `Mouse Move` during hold press        | $> 10\text{px}$ movement (`MOVE_THRESHOLD`)      | Clears the hold rotation timer immediately if the pointer strays.                                         |
+| **Dismiss Palette**       | `Left Click` outside modal box        | Instant (`click`)                                | Compares click coordinates against `getBoundingClientRect()` to close modal without state changes.        |
+| **Suppress Context Menu** | `Right Click` on board                | Instant (`contextmenu`)                          | Executes `preventDefault()` to prevent default browser context menus over the grid.                       |
 
 ---
 
@@ -46,13 +46,13 @@ When adapting these interactions to touch devices, the following mouse-specific 
 
 ## Accessibility & Keyboard Controls
 
-* **Select Tile**: Press `Enter` or `Space` while focused on a tile to open the selection palette.
-* **Focus Preservation**: Closing the tile palette explicitly restores focus to the active tile while preventing unwanted page scroll jumps (`preventScroll: true`).
+- **Select Tile**: Press `Enter` or `Space` while focused on a tile to open the selection palette.
+- **Focus Preservation**: Closing the tile palette explicitly restores focus to the active tile while preventing unwanted page scroll jumps (`preventScroll: true`).
 
 ---
 
 ## Attribution & Provenance
 
-The assets utilized in this project are derived from community artwork created by **Valnar Nightrunner** on the DakkaDakka forums and DeviantArt. This graphics set modernizes components from the original *DungeonQuest* (published by Games Workshop and Fantasy Flight Games) and *Drakborgen* (1985).
+The assets utilized in this project are derived from community artwork created by **Valnar Nightrunner** on the DakkaDakka forums and DeviantArt. This graphics set modernizes components from the original _DungeonQuest_ (published by Games Workshop and Fantasy Flight Games) and _Drakborgen_ (1985).
 
-*Note: This repository is an open-source, non-commercial fan implementation. All intellectual property rights belong to their respective trademark holders.*
+_Note: This repository is an open-source, non-commercial fan implementation. All intellectual property rights belong to their respective trademark holders._

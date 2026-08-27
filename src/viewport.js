@@ -12,12 +12,6 @@ let touchStartX = 0,
 let touchInitialX = 0,
   touchInitialY = 0;
 
-let isPinching = false;
-let initialPinchDistance = 0;
-let initialScale = 1;
-let initialFocalPoint = { x: 0, y: 0 };
-let initialCanvasPos = { x: 0, y: 0 };
-
 let didPan = false;
 const PAN_THRESHOLD = 6;
 
@@ -25,19 +19,43 @@ export function wasPanning() {
   return didPan;
 }
 
-function getPinchDistance(touches) {
-  if (touches.length < 2) return 0;
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.hypot(dx, dy);
+export function getCanvasTransform() {
+  return { ...state };
 }
 
-function getPinchMidpoint(touches) {
-  if (touches.length < 2) return { x: 0, y: 0 };
-  return {
-    x: (touches[0].clientX + touches[1].clientX) / 2,
-    y: (touches[0].clientY + touches[1].clientY) / 2,
-  };
+/**
+ * Zooms the viewport relative to the center of the screen.
+ * @param {number} factor - Scale multiplier (e.g., 1.25 for zoom in, 0.8 for zoom out)
+ */
+export function zoomViewportBy(factor) {
+  const canvasEl = document.getElementById("map-canvas");
+  if (!canvasEl) return;
+
+  const oldScale = state.scale;
+  const newScale = Math.min(Math.max(0.5, oldScale * factor), 4.0);
+
+  const focalX = window.innerWidth / 2;
+  const focalY = window.innerHeight / 2;
+
+  state.x = focalX - (focalX - state.x) * (newScale / oldScale);
+  state.y = focalY - (focalY - state.y) * (newScale / oldScale);
+  state.scale = newScale;
+
+  canvasEl.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+}
+
+/**
+ * Resets scale to 1.0x and recenters canvas offset.
+ */
+export function resetViewport() {
+  const canvasEl = document.getElementById("map-canvas");
+  if (!canvasEl) return;
+
+  state.x = 0;
+  state.y = 0;
+  state.scale = 1.0;
+
+  canvasEl.style.transform = `translate(0px, 0px) scale(1.0)`;
 }
 
 export function initMapViewport(
@@ -71,12 +89,11 @@ export function initMapViewport(
     { passive: false },
   );
 
-  // 2. Mobile Touch Handling
+  // 2. Mobile Single-Finger Touch Panning
   viewportEl.addEventListener(
     "touchstart",
     (e) => {
       if (e.touches.length === 1) {
-        isPinching = false;
         isTouchPanning = false;
         didPan = false;
 
@@ -84,19 +101,6 @@ export function initMapViewport(
         touchStartY = e.touches[0].clientY;
         touchInitialX = state.x;
         touchInitialY = state.y;
-        // Do NOT prevent default here on 1 touch so native 'click' events fire on tap
-      } else if (e.touches.length >= 2) {
-        // Lock out browser multi-touch zoom immediately
-        if (e.cancelable) e.preventDefault();
-
-        isTouchPanning = false;
-        isPinching = true;
-        didPan = true;
-
-        initialPinchDistance = getPinchDistance(e.touches);
-        initialScale = state.scale;
-        initialFocalPoint = getPinchMidpoint(e.touches);
-        initialCanvasPos = { x: state.x, y: state.y };
       }
     },
     { passive: false },
@@ -105,7 +109,7 @@ export function initMapViewport(
   window.addEventListener(
     "touchmove",
     (e) => {
-      if (e.touches.length === 1 && !isPinching) {
+      if (e.touches.length === 1) {
         const dx = e.touches[0].clientX - touchStartX;
         const dy = e.touches[0].clientY - touchStartY;
 
@@ -115,43 +119,9 @@ export function initMapViewport(
         }
 
         if (isTouchPanning) {
-          if (e.cancelable) e.preventDefault(); // Lock scrolling only after pan exceeds threshold
+          if (e.cancelable) e.preventDefault();
           state.x = touchInitialX + dx;
           state.y = touchInitialY + dy;
-          applyTransform();
-        }
-      } else if (e.touches.length >= 2) {
-        if (e.cancelable) e.preventDefault();
-
-        if (!isPinching || initialPinchDistance === 0) {
-          isPinching = true;
-          didPan = true;
-          initialPinchDistance = getPinchDistance(e.touches);
-          initialScale = state.scale;
-          initialFocalPoint = getPinchMidpoint(e.touches);
-          initialCanvasPos = { x: state.x, y: state.y };
-          return;
-        }
-
-        const currentDistance = getPinchDistance(e.touches);
-        const currentFocal = getPinchMidpoint(e.touches);
-
-        if (initialPinchDistance > 0 && currentDistance > 0) {
-          const newScale = Math.min(
-            Math.max(
-              0.5,
-              initialScale * (currentDistance / initialPinchDistance),
-            ),
-            4.0,
-          );
-
-          const scaleRatio = newScale / initialScale;
-          state.x =
-            currentFocal.x - (initialFocal.x - initialCanvasPos.x) * scaleRatio;
-          state.y =
-            currentFocal.y - (initialFocal.y - initialCanvasPos.y) * scaleRatio;
-          state.scale = newScale;
-
           applyTransform();
         }
       }
@@ -160,16 +130,8 @@ export function initMapViewport(
   );
 
   const handleTouchEnd = (e) => {
-    if (e.touches.length === 1) {
-      isPinching = false;
+    if (e.touches.length === 0) {
       isTouchPanning = false;
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      touchInitialX = state.x;
-      touchInitialY = state.y;
-    } else if (e.touches.length === 0) {
-      isTouchPanning = false;
-      isPinching = false;
     }
   };
 
@@ -212,8 +174,15 @@ export function initMapViewport(
   window.addEventListener("mouseup", () => {
     isMousePanning = false;
   });
-}
 
-export function getCanvasTransform() {
-  return { ...state };
+  // 4. Attach On-Screen Floating Controls
+  document
+    .getElementById("zoom-in-btn")
+    ?.addEventListener("click", () => zoomViewportBy(1.25));
+  document
+    .getElementById("zoom-out-btn")
+    ?.addEventListener("click", () => zoomViewportBy(0.8));
+  document
+    .getElementById("zoom-reset-btn")
+    ?.addEventListener("click", resetViewport);
 }
