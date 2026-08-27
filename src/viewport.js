@@ -7,6 +7,7 @@ let mouseInitialX = 0,
   mouseInitialY = 0;
 
 let isTouchPanning = false;
+let isViewportTouchActive = false;
 let touchStartX = 0,
   touchStartY = 0;
 let touchInitialX = 0,
@@ -90,6 +91,7 @@ export function initMapViewport(
     "touchstart",
     (e) => {
       if (e.touches.length === 1) {
+        isViewportTouchActive = true;
         isTouchPanning = false;
         didPan = false;
 
@@ -105,6 +107,8 @@ export function initMapViewport(
   window.addEventListener(
     "touchmove",
     (e) => {
+      if (!isViewportTouchActive) return;
+
       if (e.touches.length === 1) {
         const dx = e.touches[0].clientX - touchStartX;
         const dy = e.touches[0].clientY - touchStartY;
@@ -128,6 +132,7 @@ export function initMapViewport(
   const handleTouchEnd = (e) => {
     if (e.touches.length === 0) {
       isTouchPanning = false;
+      isViewportTouchActive = false;
     }
   };
 

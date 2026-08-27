@@ -105,6 +105,8 @@ body {
   margin-bottom: 16px;
   max-height: 50vh;
   overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tile-category {
@@ -211,6 +213,7 @@ body {
   margin: auto;
   position: fixed;
   inset: 0;
+  touch-action: auto;
 }
 
 .tile-palette::backdrop {
