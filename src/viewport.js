@@ -19,10 +19,6 @@ export function wasPanning() {
   return didPan;
 }
 
-export function getCanvasTransform() {
-  return { ...state };
-}
-
 /**
  * Zooms the viewport relative to the center of the screen.
  * @param {number} factor - Scale multiplier (e.g., 1.25 for zoom in, 0.8 for zoom out)

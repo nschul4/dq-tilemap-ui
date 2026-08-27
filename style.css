@@ -43,14 +43,6 @@ body {
   user-select: none;
 }
 
-.game-container {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  aspect-ratio: 3000 / 2800;
-}
-
 .game-background-img {
   position: absolute;
   inset: 0;
@@ -99,23 +91,6 @@ body {
   outline: 2px solid #4f9bfd;
 }
 
-.centered-menu {
-  border: none;
-  border-radius: 8px;
-  background: #2a2a32;
-  color: #fff;
-  padding: 24px;
-  width: 550px;
-  max-width: 90vw;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  margin: auto;
-}
-
-.centered-menu::backdrop {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(2px);
-}
-
 .menu-form h3 {
   margin-bottom: 16px;
   text-align: center;
@@ -130,33 +105,6 @@ body {
   margin-bottom: 16px;
   max-height: 50vh;
   overflow-y: auto;
-}
-
-.menu-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  background: #3a3a45;
-  border: 1px solid #555;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  width: 100%;
-}
-
-.menu-option:hover {
-  background: #4a4a57;
-}
-
-.menu-option .icon {
-  width: 20px;
-  height: 20px;
-}
-
-.option-unset .icon {
-  color: #616161;
 }
 
 .tile-category {
