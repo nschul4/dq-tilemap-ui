@@ -13,7 +13,7 @@ body {
   background-color: #1e1e24;
   color: #f5f5f5;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   min-height: 100vh;
   padding: 20px;
@@ -25,6 +25,9 @@ body {
   --grid-size-cols: 13;
   --grid-size-rows: 10;
 
+  --bg-width: 3000px;
+  --bg-height: 2800px;
+
   --grid-nudge-x: 200px;
   --grid-nudge-y: 500px;
   --board-scale: 0.4;
@@ -32,17 +35,18 @@ body {
 
 .game-container {
   position: relative;
-  width: calc(var(--grid-size-cols) * var(--tile-native-size));
-  height: calc(var(--grid-size-rows) * var(--tile-native-size));
+  width: var(--bg-width);
+  height: var(--bg-height);
   transform: scale(var(--board-scale));
-  transform-origin: top center;
-  margin-bottom: calc(2000px * (var(--board-scale) - 1));
+  transform-origin: top left;
+  margin-right: calc(var(--bg-width) * (var(--board-scale) - 1));
+  margin-bottom: calc(var(--bg-height) * (var(--board-scale) - 1));
 }
 
 .game-background-img {
   position: absolute;
-  top: calc(var(--grid-nudge-y) * -1);
-  left: calc(var(--grid-nudge-x) * -1);
+  top: 0;
+  left: 0;
   width: 3000px;
   height: 2800px;
   max-width: none;
@@ -53,8 +57,8 @@ body {
 
 .grid-board {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: var(--grid-nudge-y);
+  left: var(--grid-nudge-x);
 
   width: calc(var(--grid-size-cols) * var(--tile-native-size));
   height: calc(var(--grid-size-rows) * var(--tile-native-size));
