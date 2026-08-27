@@ -41,8 +41,7 @@ function onPointerDown(e) {
 
   currentHoldTile = tile;
   isHoldAction = false;
-  isCounterClockwise = !!(e.ctrlKey || e.shiftKey) || isCounterClockwise;
-
+  isCounterClockwise = !!(e.ctrlKey || e.shiftKey);
   pointerStartX = e.clientX;
   pointerStartY = e.clientY;
 
@@ -59,13 +58,8 @@ function onPointerMove(e) {
   }
 }
 
-function onPointerUp() {
+function onPointerEnd() {
   stopHoldRotation();
-}
-
-function onPointerCancel() {
-  stopHoldRotation();
-  isHoldAction = false;
 }
 
 export function initInteractions(
@@ -84,8 +78,8 @@ export function initInteractions(
 
   board.addEventListener("pointerdown", onPointerDown);
   board.addEventListener("pointermove", onPointerMove);
-  board.addEventListener("pointerup", onPointerUp);
-  board.addEventListener("pointercancel", onPointerCancel);
+  board.addEventListener("pointerup", onPointerEnd);
+  board.addEventListener("pointercancel", onPointerEnd);
 
   board.addEventListener("click", (e) => {
     const tile = e.target.closest(".tile");

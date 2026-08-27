@@ -2,11 +2,6 @@ import { updateTileState } from "./grid.js";
 
 let activeTile = null;
 
-/**
- * Opens the tile selection modal dialog.
- * @param {HTMLElement} tile
- * @param {HTMLDialogElement} [menu]
- */
 export function openTileMenu(
   tile,
   menu = document.getElementById("tile-menu"),
@@ -18,11 +13,6 @@ export function openTileMenu(
   menu.showModal();
 }
 
-/**
- * Initializes modal event listeners for dialog closure and cancel action.
- * @param {HTMLDialogElement} [menu]
- * @param {HTMLElement} [cancelBtn]
- */
 export function initModal(
   menu = document.getElementById("tile-menu"),
   cancelBtn = document.getElementById("menu-cancel"),
@@ -39,6 +29,19 @@ export function initModal(
     }
 
     activeTile = null;
+  });
+
+  menu.addEventListener("click", (e) => {
+    const rect = menu.getBoundingClientRect();
+    const isOutside =
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom;
+
+    if (isOutside) {
+      menu.close("");
+    }
   });
 
   if (cancelBtn) {
