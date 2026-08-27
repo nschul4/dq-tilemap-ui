@@ -1,5 +1,6 @@
 import { rotateTile } from "./grid.js";
 import { openTilePalette } from "./modal.js";
+import { wasPanning } from "./viewport.js";
 
 const MOVE_THRESHOLD = 10;
 const HOLD_DELAY = 350;
@@ -84,6 +85,10 @@ export function initInteractions(
   board.addEventListener("click", (e) => {
     const tile = e.target.closest(".tile");
     if (!tile) return;
+
+    if (wasPanning()) {
+      return;
+    }
 
     if (isHoldAction) {
       isHoldAction = false;
