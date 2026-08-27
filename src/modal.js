@@ -1,20 +1,11 @@
 import { updateTileState } from "./grid.js";
 
 let activeTile = null;
-let clickedRow = null;
-let clickedCol = null;
-
-let savedScrollX = 0;
-let savedScrollY = 0;
-
-function restoreScrollPosition() {
-  window.scrollTo(savedScrollX, savedScrollY);
-}
 
 /**
- * Opens the tile selection modal dialog and locks body scroll position.
- * @param {HTMLElement} tile - Target tile DOM element.
- * @param {HTMLDialogElement} [menu] - Modal dialog element.
+ * Opens the tile selection modal dialog.
+ * @param {HTMLElement} tile
+ * @param {HTMLDialogElement} [menu]
  */
 export function openTileMenu(
   tile,
@@ -22,26 +13,15 @@ export function openTileMenu(
 ) {
   if (!tile || !menu) return;
 
-  savedScrollX = window.scrollX || window.pageXOffset;
-  savedScrollY = window.scrollY || window.pageYOffset;
-
   activeTile = tile;
-  clickedRow = tile.dataset.row;
-  clickedCol = tile.dataset.col;
   menu.returnValue = "";
-
   menu.showModal();
-
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${savedScrollY}px`;
-  document.body.style.left = `-${savedScrollX}px`;
-  document.body.style.width = "100%";
 }
 
 /**
  * Initializes modal event listeners for dialog closure and cancel action.
- * @param {HTMLDialogElement} [menu] - Modal dialog element.
- * @param {HTMLElement} [cancelBtn] - Cancel button element.
+ * @param {HTMLDialogElement} [menu]
+ * @param {HTMLElement} [cancelBtn]
  */
 export function initModal(
   menu = document.getElementById("tile-menu"),
@@ -50,24 +30,15 @@ export function initModal(
   if (!menu) return;
 
   menu.addEventListener("close", () => {
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.left = "";
-    document.body.style.width = "";
-
-    restoreScrollPosition();
-    setTimeout(restoreScrollPosition, 0);
-
-    const targetTile = document.querySelector(
-      `[data-row="${clickedRow}"][data-col="${clickedCol}"]`,
-    );
-    if (targetTile) {
-      targetTile.focus({ preventScroll: true });
+    if (activeTile) {
+      activeTile.focus({ preventScroll: true });
     }
 
-    if (!menu.returnValue) return;
+    if (menu.returnValue && activeTile) {
+      updateTileState(activeTile, menu.returnValue);
+    }
 
-    updateTileState(targetTile, menu.returnValue, clickedRow, clickedCol);
+    activeTile = null;
   });
 
   if (cancelBtn) {

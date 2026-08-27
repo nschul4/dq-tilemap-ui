@@ -28,7 +28,7 @@ function triggerHoldRotation() {
   if (!currentHoldTile) return;
 
   isHoldAction = true;
-  rotateTile(currentHoldTile, { ctrlKey: isCounterClockwise });
+  rotateTile(currentHoldTile, isCounterClockwise);
 
   holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
 }
@@ -46,12 +46,6 @@ function onPointerDown(e) {
   pointerStartX = e.clientX;
   pointerStartY = e.clientY;
 
-  if (e.pointerId != null && tile.setPointerCapture) {
-    try {
-      tile.setPointerCapture(e.pointerId);
-    } catch (err) {}
-  }
-
   holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
 }
 
@@ -65,16 +59,7 @@ function onPointerMove(e) {
   }
 }
 
-function onPointerUp(e) {
-  if (
-    currentHoldTile &&
-    e.pointerId != null &&
-    currentHoldTile.releasePointerCapture
-  ) {
-    try {
-      currentHoldTile.releasePointerCapture(e.pointerId);
-    } catch (err) {}
-  }
+function onPointerUp() {
   stopHoldRotation();
 }
 
@@ -83,10 +68,6 @@ function onPointerCancel() {
   isHoldAction = false;
 }
 
-/**
- * Attaches pointer, click, keydown, and window event listeners for grid tile interactions.
- * @param {HTMLElement} [board] - Target grid board element.
- */
 export function initInteractions(
   board = document.getElementById("game-board"),
 ) {
@@ -118,9 +99,7 @@ export function initInteractions(
     openTileMenu(tile);
   });
 
-  board.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-  });
+  board.addEventListener("contextmenu", (e) => e.preventDefault());
 
   board.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
