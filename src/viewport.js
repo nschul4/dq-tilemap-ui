@@ -26,12 +26,14 @@ export function wasPanning() {
 }
 
 function getPinchDistance(touches) {
+  if (touches.length < 2) return 0;
   const dx = touches[0].clientX - touches[1].clientX;
   const dy = touches[0].clientY - touches[1].clientY;
   return Math.hypot(dx, dy);
 }
 
 function getPinchMidpoint(touches) {
+  if (touches.length < 2) return { x: 0, y: 0 };
   return {
     x: (touches[0].clientX + touches[1].clientX) / 2,
     y: (touches[0].clientY + touches[1].clientY) / 2,
@@ -70,11 +72,9 @@ export function initMapViewport(
   );
 
   // 2. Mobile Touch Handling
-  window.addEventListener(
+  viewportEl.addEventListener(
     "touchstart",
     (e) => {
-      if (!viewportEl.contains(e.target)) return;
-
       if (e.touches.length === 1) {
         isPinching = false;
         isTouchPanning = false;
@@ -84,12 +84,15 @@ export function initMapViewport(
         touchStartY = e.touches[0].clientY;
         touchInitialX = state.x;
         touchInitialY = state.y;
-      } else if (e.touches.length === 2) {
+        // Do NOT prevent default here on 1 touch so native 'click' events fire on tap
+      } else if (e.touches.length >= 2) {
+        // Lock out browser multi-touch zoom immediately
+        if (e.cancelable) e.preventDefault();
+
         isTouchPanning = false;
         isPinching = true;
         didPan = true;
 
-        if (e.cancelable) e.preventDefault();
         initialPinchDistance = getPinchDistance(e.touches);
         initialScale = state.scale;
         initialFocalPoint = getPinchMidpoint(e.touches);
@@ -102,9 +105,6 @@ export function initMapViewport(
   window.addEventListener(
     "touchmove",
     (e) => {
-      if (!viewportEl.contains(e.target) && !isTouchPanning && !isPinching)
-        return;
-
       if (e.touches.length === 1 && !isPinching) {
         const dx = e.touches[0].clientX - touchStartX;
         const dy = e.touches[0].clientY - touchStartY;
@@ -115,12 +115,12 @@ export function initMapViewport(
         }
 
         if (isTouchPanning) {
-          if (e.cancelable) e.preventDefault();
+          if (e.cancelable) e.preventDefault(); // Lock scrolling only after pan exceeds threshold
           state.x = touchInitialX + dx;
           state.y = touchInitialY + dy;
           applyTransform();
         }
-      } else if (e.touches.length === 2) {
+      } else if (e.touches.length >= 2) {
         if (e.cancelable) e.preventDefault();
 
         if (!isPinching || initialPinchDistance === 0) {
@@ -159,7 +159,7 @@ export function initMapViewport(
     { passive: false },
   );
 
-  window.addEventListener("touchend", (e) => {
+  const handleTouchEnd = (e) => {
     if (e.touches.length === 1) {
       isPinching = false;
       isTouchPanning = false;
@@ -171,7 +171,10 @@ export function initMapViewport(
       isTouchPanning = false;
       isPinching = false;
     }
-  });
+  };
+
+  window.addEventListener("touchend", handleTouchEnd);
+  window.addEventListener("touchcancel", handleTouchEnd);
 
   // 3. Desktop Mouse Drag Panning
   viewportEl.addEventListener("mousedown", (e) => {
