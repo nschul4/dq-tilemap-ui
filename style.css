@@ -51,6 +51,8 @@ body {
   object-fit: contain;
   pointer-events: none;
   opacity: 0.9;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .grid-board {
@@ -74,6 +76,8 @@ body {
   transition:
     transform 0.1s ease,
     box-shadow 0.1s ease;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .tile[data-terrain="unset"]:hover,
@@ -195,10 +199,9 @@ body {
 .map-canvas {
   position: absolute;
   width: 100%;
-  max-width: 1200px;
+  max-width: 3000px;
   aspect-ratio: 3000 / 2800;
   transform-origin: 0 0;
-  will-change: transform;
 }
 
 /* Tile Palette Modal styling */
