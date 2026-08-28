@@ -618,3 +618,19 @@ export const TILES_DATA = [
     ],
   },
 ];
+
+/**
+ * Pre-computed Map lookup indexed by variant ID key (e.g. "dungeon-room-variant-1").
+ * @type {Map<string, {name: string, src: string, category: string}>}
+ */
+export const TILE_LOOKUP = new Map();
+
+TILES_DATA.forEach((group) => {
+  group.variants.forEach((variant) => {
+    const key = variant.name.toLowerCase().replace(/\s+/g, "-");
+    TILE_LOOKUP.set(key, {
+      ...variant,
+      category: group.category,
+    });
+  });
+});

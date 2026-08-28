@@ -1,3 +1,5 @@
+import { TILE_LOOKUP } from "./tiles.js";
+
 /**
  * Initializes grid tiles inside the target board container.
  * @param {HTMLElement} [board]
@@ -49,7 +51,7 @@ export function rotateTile(tile, isCCW = false) {
 }
 
 /**
- * Updates tile datasets, styles, and ARIA labels.
+ * Updates tile datasets, styles, and ARIA labels via direct data indexing.
  * @param {HTMLElement} targetTile
  * @param {string} newTerrain
  */
@@ -74,15 +76,12 @@ export function updateTileState(targetTile, newTerrain) {
     delete targetTile.dataset.terrain;
     targetTile.dataset.variant = newTerrain;
 
-    const variantBtn = document.querySelector(`button[value="${newTerrain}"]`);
-    const variantImg = variantBtn?.querySelector("img");
+    const tileData = TILE_LOOKUP.get(newTerrain);
 
-    targetTile.style.backgroundImage = variantImg
-      ? `url('${variantImg.src}')`
-      : "";
-    targetTile.title = variantBtn?.title || "";
+    targetTile.style.backgroundImage = tileData ? `url('${tileData.src}')` : "";
+    targetTile.title = tileData?.name || "";
 
-    const formattedName = newTerrain.replace(/-/g, " ");
+    const formattedName = tileData?.name || newTerrain.replace(/-/g, " ");
     targetTile.setAttribute(
       "aria-label",
       `${formattedName} at row ${rowNum}, column ${colNum}`,
