@@ -88,3 +88,55 @@ export function updateTileState(targetTile, newTerrain) {
     );
   }
 }
+
+/**
+ * Serializes current grid state into a plain array of JSON objects.
+ * @param {HTMLElement} [board]
+ * @returns {Array<{row: number, col: number, variant: string|null, rotation: number}>}
+ */
+export function serializeBoardState(
+  board = document.getElementById("game-board"),
+) {
+  if (!board) return [];
+
+  const tiles = Array.from(board.querySelectorAll(".tile"));
+  return tiles.map((tile) => ({
+    row: parseInt(tile.dataset.row, 10),
+    col: parseInt(tile.dataset.col, 10),
+    variant: tile.dataset.variant || null,
+    rotation: parseInt(tile.dataset.rotation, 10) || 0,
+  }));
+}
+
+/**
+ * Restores grid board layout from an array of tile state objects.
+ * @param {Array<{row: number, col: number, variant: string|null, rotation: number}>} stateData
+ * @param {HTMLElement} [board]
+ */
+export function deserializeBoardState(
+  stateData,
+  board = document.getElementById("game-board"),
+) {
+  if (!board || !Array.isArray(stateData)) return;
+
+  const stateMap = new Map(
+    stateData.map((item) => [`${item.row}-${item.col}`, item]),
+  );
+
+  const tiles = board.querySelectorAll(".tile");
+  tiles.forEach((tile) => {
+    const r = parseInt(tile.dataset.row, 10);
+    const c = parseInt(tile.dataset.col, 10);
+    const savedItem = stateMap.get(`${r}-${c}`);
+
+    if (savedItem && savedItem.variant) {
+      updateTileState(tile, savedItem.variant);
+      if (savedItem.rotation) {
+        tile.dataset.rotation = savedItem.rotation;
+        tile.style.setProperty("--tile-rotation", `${savedItem.rotation}deg`);
+      }
+    } else {
+      updateTileState(tile, "unset");
+    }
+  });
+}

@@ -47,6 +47,29 @@
       <button type="button" id="zoom-reset-btn" aria-label="Reset View">
         100%
       </button>
+      <hr class="control-divider" />
+      <button
+        type="button"
+        id="export-btn"
+        title="Export Map JSON"
+        aria-label="Export Map JSON"
+      >
+        💾
+      </button>
+      <button
+        type="button"
+        id="import-btn"
+        title="Import Map JSON"
+        aria-label="Import Map JSON"
+      >
+        📂
+      </button>
+      <input
+        type="file"
+        id="import-file-input"
+        accept="application/json"
+        hidden
+      />
     </div>
 
     <script type="module" src="src/app.js"></script>

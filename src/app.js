@@ -1,5 +1,9 @@
 import { renderTileMenu } from "./menuRenderer.js";
-import { initGrid } from "./grid.js";
+import {
+  initGrid,
+  serializeBoardState,
+  deserializeBoardState,
+} from "./grid.js";
 import { initModal } from "./modal.js";
 import { initInteractions } from "./interactions.js";
 import { initMapViewport } from "./viewport.js";
@@ -23,6 +27,53 @@ function initVersionBadge(ver) {
   document.body.appendChild(badge);
 }
 
+/**
+ * Initializes JSON save/load toolbar controls.
+ */
+function initStorageControls() {
+  const exportBtn = document.getElementById("export-btn");
+  const importBtn = document.getElementById("import-btn");
+  const importFileInput = document.getElementById("import-file-input");
+
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      const state = serializeBoardState();
+      const jsonStr = JSON.stringify(state, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `dq-tilemap-save-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  if (importBtn && importFileInput) {
+    importBtn.addEventListener("click", () => {
+      importFileInput.value = "";
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsedState = JSON.parse(event.target.result);
+          deserializeBoardState(parsedState);
+        } catch (err) {
+          alert("Failed to load map state: Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
+}
+
 console.log(`dq-tilemap-ui ${version} - ${projectUrl}`);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,4 +83,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initGrid();
   initModal();
   initInteractions();
+  initStorageControls();
 });
