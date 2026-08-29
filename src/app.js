@@ -7,8 +7,8 @@ import {
 import { initModal } from "./modal.js";
 import { initInteractions } from "./interactions.js";
 import { initMapViewport } from "./viewport.js";
+import { version } from "./version.js";
 
-const version = "v1.0.0";
 const projectUrl = "https://github.com/nschul4/dq-tilemap-ui";
 const SHOW_VERSION_BADGE = true; // Toggle true/false to turn badge on/off
 
