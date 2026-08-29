@@ -1,6 +1,6 @@
 # dq-tilemap-ui
 
-A DOM-driven web engine and interactive board builder for game tiles based on _DungeonQuest_ (_Drakborgen_). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state directly inside DOM attributes rather than in-memory state arrays.
+A web engine and interactive board builder for game tiles based on _DungeonQuest_ (_Drakborgen_). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state in an in-memory reactive store that syncs view changes to the DOM.
 
 This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://nschul4.github.io/dq-tilemap-ui/)
 
@@ -8,11 +8,12 @@ This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://nschul4
 
 ## Key Features
 
-- **DOM-as-State Architecture**: Cell attributes (`data-row`, `data-col`, `data-variant`, `data-rotation`) are stored directly on element nodes.
+- **In-Memory Reactive State Store**: Decoupled application state managed by an in-memory `BoardState` model extending `EventTarget`, emitting custom events (`tilechange`, `statechange`) to keep the DOM view strictly in sync.
 - **Cursor-Anchored & Control-Driven Viewport Zoom**: Smooth map scaling between 0.5x and 4.0x anchored to mouse pointer position or via floating UI buttons (`+`, `-`, `100%`).
 - **Drag & Touch Panning**: Dual desktop drag-panning and single-finger touch-panning with a built-in 6px drag threshold (`PAN_THRESHOLD`) to separate map navigation from tile selection clicks.
 - **Press-and-Hold Tile Rotation**: Continuous tile rotation engine with a 350ms press delay, a 10px movement cancellation threshold, and modifier key support.
 - **Interactive Tile Palette**: Native HTML `<dialog>` selection menu with backdrop click-to-dismiss support.
+- **JSON Save & Load**: Full map state serialization and deserialization allowing users to export and import tilemap configurations.
 - **Extensible Tile Categories**: Dynamic rendering of room layouts, hazards, passages, and structural features configured through `TILES_DATA`.
 - **Configurable Version Indicator**: Top-right floating version badge driven by `SHOW_VERSION_BADGE` configuration.
 
@@ -27,7 +28,7 @@ The engine enforces strict pointer input rules to prevent gesture collisions bet
 | **Zoom Viewport**         | `Wheel Scroll` on viewport or Floating Buttons (`+`, `-`, `100%`) | 0.5x to 4.0x bounds                              | Wheel multiplies scale by 1.1x (in) or 0.9x (out) anchored to mouse `clientX`/`clientY`. Floating buttons scale relative to screen center or reset to 1.0x. |
 | **Pan Canvas**            | `Left-Click + Drag` or Single-Touch Drag on viewport              | > 6px movement (`PAN_THRESHOLD`)                 | Updates transform translate offset. Flags `didPan = true` to prevent triggering tile clicks upon release.                                                   |
 | **Open Palette**          | `Left Click` or `Tap` on tile                                     | Instant (`click`)                                | Triggers `<dialog>` modal. Suppressed if the pointer action was a canvas pan or hold-rotation.                                                              |
-| **Rotate Clockwise**      | `Click & Hold` on placed tile                                     | 350ms initial delay, 350ms repeat (`HOLD_DELAY`) | Rotates tile +90° continuously. Applies only to placed tiles containing a `data-variant` attribute.                                                         |
+| **Rotate Clockwise**      | `Click & Hold` on placed tile                                     | 350ms initial delay, 350ms repeat (`HOLD_DELAY`) | Rotates tile +90° continuously. Applies only to placed tiles with an active variant in state.                                                               |
 | **Rotate Counter-CW**     | `Shift` / `Ctrl` + `Click & Hold`                                 | 350ms initial delay, 350ms repeat                | Rotates tile -90° continuously while keyboard modifier keys are pressed.                                                                                    |
 | **Cancel Rotation**       | `Mouse Move` during hold press                                    | > 10px movement (`MOVE_THRESHOLD`)               | Clears the hold rotation timer immediately if the pointer strays.                                                                                           |
 | **Dismiss Palette**       | `Left Click` outside modal box                                    | Instant (`click`)                                | Compares click coordinates against `getBoundingClientRect()` to close modal without state changes.                                                          |
