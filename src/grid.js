@@ -90,9 +90,9 @@ export function updateTileState(targetTile, newTerrain) {
 }
 
 /**
- * Serializes current grid state into a plain array of JSON objects.
+ * Serializes current grid state into a plain array of JSON objects for populated tiles only.
  * @param {HTMLElement} [board]
- * @returns {Array<{row: number, col: number, variant: string|null, rotation: number}>}
+ * @returns {Array<{row: number, col: number, variant: string, rotation: number}>}
  */
 export function serializeBoardState(
   board = document.getElementById("game-board"),
@@ -100,12 +100,14 @@ export function serializeBoardState(
   if (!board) return [];
 
   const tiles = Array.from(board.querySelectorAll(".tile"));
-  return tiles.map((tile) => ({
-    row: parseInt(tile.dataset.row, 10),
-    col: parseInt(tile.dataset.col, 10),
-    variant: tile.dataset.variant || null,
-    rotation: parseInt(tile.dataset.rotation, 10) || 0,
-  }));
+  return tiles
+    .filter((tile) => Boolean(tile.dataset.variant))
+    .map((tile) => ({
+      row: parseInt(tile.dataset.row, 10),
+      col: parseInt(tile.dataset.col, 10),
+      variant: tile.dataset.variant,
+      rotation: parseInt(tile.dataset.rotation, 10) || 0,
+    }));
 }
 
 /**
