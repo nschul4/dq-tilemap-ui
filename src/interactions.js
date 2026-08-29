@@ -3,117 +3,142 @@ import { openTilePalette } from "./modal.js";
 import { wasPanning } from "./viewport.js";
 import { boardState } from "./boardState.js";
 
-const MOVE_THRESHOLD = 10;
-const HOLD_DELAY = 350;
+/**
+ * Manages pointer press-and-hold timers, modifier key states, and tile interaction triggers.
+ */
+export class InteractionManager {
+  /**
+   * @param {HTMLElement} [board]
+   */
+  constructor(board = document.getElementById("game-board")) {
+    this.board = board;
+    this.MOVE_THRESHOLD = 10;
+    this.HOLD_DELAY = 350;
 
-let currentHoldTile = null;
-let holdTimer = null;
-let isHoldAction = false;
-let isCounterClockwise = false;
+    this.currentHoldTile = null;
+    this.holdTimer = null;
+    this.isHoldAction = false;
+    this.isCounterClockwise = false;
 
-let pointerStartX = 0;
-let pointerStartY = 0;
+    this.pointerStartX = 0;
+    this.pointerStartY = 0;
 
-function updateModifierState(e) {
-  isCounterClockwise = !!(e.shiftKey || e.ctrlKey);
-}
-
-function stopHoldRotation() {
-  if (holdTimer) {
-    clearTimeout(holdTimer);
-    holdTimer = null;
+    this.init();
   }
-  currentHoldTile = null;
-}
 
-function triggerHoldRotation() {
-  if (!currentHoldTile) return;
-
-  isHoldAction = true;
-  rotateTile(currentHoldTile, isCounterClockwise);
-
-  holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
-}
-
-function onPointerDown(e) {
-  if (e.pointerType === "mouse" && e.button !== 0) return;
-
-  const tile = e.target.closest(".tile");
-  if (!tile) return;
-
-  const row = parseInt(tile.dataset.row, 10);
-  const col = parseInt(tile.dataset.col, 10);
-  const tileState = boardState.getTile(row, col);
-
-  if (!tileState.variant) return;
-
-  currentHoldTile = tile;
-  isHoldAction = false;
-  isCounterClockwise = !!(e.ctrlKey || e.shiftKey);
-  pointerStartX = e.clientX;
-  pointerStartY = e.clientY;
-
-  holdTimer = setTimeout(triggerHoldRotation, HOLD_DELAY);
-}
-
-function onPointerMove(e) {
-  if (!currentHoldTile || !holdTimer) return;
-
-  const dx = Math.abs(e.clientX - pointerStartX);
-  const dy = Math.abs(e.clientY - pointerStartY);
-  if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD) {
-    stopHoldRotation();
+  updateModifierState(e) {
+    this.isCounterClockwise = !!(e.shiftKey || e.ctrlKey);
   }
-}
 
-function onPointerEnd() {
-  stopHoldRotation();
-}
+  stopHoldRotation() {
+    if (this.holdTimer) {
+      clearTimeout(this.holdTimer);
+      this.holdTimer = null;
+    }
+    this.currentHoldTile = null;
+  }
 
-export function initInteractions(
-  board = document.getElementById("game-board"),
-) {
-  if (!board) return;
+  triggerHoldRotation() {
+    if (!this.currentHoldTile) return;
 
-  window.addEventListener("keydown", updateModifierState);
-  window.addEventListener("keyup", updateModifierState);
+    this.isHoldAction = true;
+    rotateTile(this.currentHoldTile, this.isCounterClockwise);
 
-  window.addEventListener("blur", () => {
-    isCounterClockwise = false;
-    stopHoldRotation();
-    isHoldAction = false;
-  });
+    this.holdTimer = setTimeout(
+      () => this.triggerHoldRotation(),
+      this.HOLD_DELAY,
+    );
+  }
 
-  board.addEventListener("pointerdown", onPointerDown);
-  board.addEventListener("pointermove", onPointerMove);
-  board.addEventListener("pointerup", onPointerEnd);
-  board.addEventListener("pointercancel", onPointerEnd);
+  onPointerDown(e) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
 
-  board.addEventListener("click", (e) => {
     const tile = e.target.closest(".tile");
     if (!tile) return;
 
-    if (wasPanning()) {
-      return;
+    const row = parseInt(tile.dataset.row, 10);
+    const col = parseInt(tile.dataset.col, 10);
+    const tileState = boardState.getTile(row, col);
+
+    if (!tileState.variant) return;
+
+    this.currentHoldTile = tile;
+    this.isHoldAction = false;
+    this.isCounterClockwise = !!(e.ctrlKey || e.shiftKey);
+    this.pointerStartX = e.clientX;
+    this.pointerStartY = e.clientY;
+
+    this.holdTimer = setTimeout(
+      () => this.triggerHoldRotation(),
+      this.HOLD_DELAY,
+    );
+  }
+
+  onPointerMove(e) {
+    if (!this.currentHoldTile || !this.holdTimer) return;
+
+    const dx = Math.abs(e.clientX - this.pointerStartX);
+    const dy = Math.abs(e.clientY - this.pointerStartY);
+    if (dx > this.MOVE_THRESHOLD || dy > this.MOVE_THRESHOLD) {
+      this.stopHoldRotation();
     }
+  }
 
-    if (isHoldAction) {
-      isHoldAction = false;
-      return;
-    }
+  onPointerEnd() {
+    this.stopHoldRotation();
+  }
 
-    openTilePalette(tile);
-  });
+  init() {
+    if (!this.board) return;
 
-  board.addEventListener("contextmenu", (e) => e.preventDefault());
+    const onKeyDownUp = (e) => this.updateModifierState(e);
+    window.addEventListener("keydown", onKeyDownUp);
+    window.addEventListener("keyup", onKeyDownUp);
 
-  board.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
+    window.addEventListener("blur", () => {
+      this.isCounterClockwise = false;
+      this.stopHoldRotation();
+      this.isHoldAction = false;
+    });
+
+    this.board.addEventListener("pointerdown", (e) => this.onPointerDown(e));
+    this.board.addEventListener("pointermove", (e) => this.onPointerMove(e));
+    this.board.addEventListener("pointerup", () => this.onPointerEnd());
+    this.board.addEventListener("pointercancel", () => this.onPointerEnd());
+
+    this.board.addEventListener("click", (e) => {
       const tile = e.target.closest(".tile");
       if (!tile) return;
 
-      e.preventDefault();
+      if (wasPanning()) {
+        return;
+      }
+
+      if (this.isHoldAction) {
+        this.isHoldAction = false;
+        return;
+      }
+
       openTilePalette(tile);
-    }
-  });
+    });
+
+    this.board.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    this.board.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        const tile = e.target.closest(".tile");
+        if (!tile) return;
+
+        e.preventDefault();
+        openTilePalette(tile);
+      }
+    });
+  }
+}
+
+export let interactionManager = null;
+
+export function initInteractions(board) {
+  interactionManager = new InteractionManager(board);
+  return interactionManager;
 }
