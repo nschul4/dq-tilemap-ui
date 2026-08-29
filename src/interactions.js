@@ -1,6 +1,7 @@
 import { rotateTile } from "./grid.js";
 import { openTilePalette } from "./modal.js";
 import { wasPanning } from "./viewport.js";
+import { boardState } from "./boardState.js";
 
 const MOVE_THRESHOLD = 10;
 const HOLD_DELAY = 350;
@@ -38,7 +39,13 @@ function onPointerDown(e) {
   if (e.pointerType === "mouse" && e.button !== 0) return;
 
   const tile = e.target.closest(".tile");
-  if (!tile || !tile.dataset.variant) return;
+  if (!tile) return;
+
+  const row = parseInt(tile.dataset.row, 10);
+  const col = parseInt(tile.dataset.col, 10);
+  const tileState = boardState.getTile(row, col);
+
+  if (!tileState.variant) return;
 
   currentHoldTile = tile;
   isHoldAction = false;
