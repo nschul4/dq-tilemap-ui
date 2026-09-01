@@ -1,6 +1,6 @@
 # dq-tilemap-ui
 
-A web engine and interactive board builder for game tiles based on _DungeonQuest_ (_Drakborgen_). It renders a customizable, decoupled grid canvas directly in the browser using raw HTML, CSS, and vanilla JavaScript—storing game state in an in-memory reactive store that syncs view changes to the DOM.
+An interactive DungeonQuest tilemap builder featuring gesture controls, press-and-hold tile rotation, and JSON save/load. It renders a customizable grid canvas in the browser using vanilla JavaScript and HTML5/CSS—powered by a decoupled, reactive in-memory state store.
 
 This site is live at: [https://nschul4.github.io/dq-tilemap-ui/](https://nschul4.github.io/dq-tilemap-ui/)
 
