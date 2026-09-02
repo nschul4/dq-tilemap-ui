@@ -1,1 +1,1 @@
-export const version = "v1.0.0-Kanda";
+export const version = "v1.0.0-Estrada";
