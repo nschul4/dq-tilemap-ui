@@ -272,26 +272,27 @@ body {
 /* Touchscreen Device Adaptations (including Android Desktop mode) */
 @media (pointer: coarse) {
   .viewport-controls {
-    bottom: 24px;
-    right: 24px;
-    gap: 12px;
+    bottom: 28px;
+    right: 28px;
+    gap: 14px;
   }
 
   .viewport-controls button {
-    width: clamp(52px, 14vw, 68px);
-    height: clamp(52px, 14vw, 68px);
-    font-size: clamp(22px, 5.5vw, 28px);
+    width: clamp(64px, 18vw, 84px);
+    height: clamp(64px, 18vw, 84px);
+    font-size: clamp(28px, 7vw, 36px);
   }
 
   #zoom-reset-btn {
-    font-size: clamp(13px, 3.2vw, 16px);
-    border-radius: 10px;
+    font-size: clamp(16px, 4vw, 20px);
+    border-radius: 12px;
   }
 
   .version-badge {
-    top: 16px;
-    right: 16px;
-    font-size: clamp(13px, 3.5vw, 16px);
-    padding: 6px 14px;
+    top: 20px;
+    right: 20px;
+    font-size: clamp(15px, 4.5vw, 18px);
+    padding: 8px 16px;
+    border-radius: 16px;
   }
 }
