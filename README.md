@@ -36,16 +36,6 @@ The engine enforces strict pointer input rules to prevent gesture collisions bet
 
 ---
 
-## Mobile & Touch Interactions
-
-While single-finger touch-panning is functional, the following mobile constraints and planned feature enhancements should be noted for ongoing development:
-
-1. **PWA & Standalone Display Scaling Issue**: Viewport zooming is managed via floating screen overlay controls (`+`, `-`, `100%`). However, when launched in Progressive Web App (PWA) standalone mode or installed via browser "Desktop install", both the floating viewport control overlay and the top-right version badge render significantly undersized and are nearly impossible to use. A resolution for UI scaling in standalone display modes remains open.
-2. **Lack of Hardware Modifiers**: Touch inputs cannot rely on physical `Shift` or `Ctrl` keys to reverse continuous rotation direction to counter-clockwise.
-3. **Gesture Disambiguation**: Single-finger drag-panning shares input triggers with the single-finger press-and-hold timer used for tile rotation. Movement beyond `PAN_THRESHOLD` explicitly flags panning to avoid accidental rotation triggers.
-
----
-
 ## Accessibility & Keyboard Controls
 
 - **Select Tile**: Press `Enter` or `Space` while focused on a tile to open the selection palette.
