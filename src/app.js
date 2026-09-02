@@ -6,7 +6,7 @@ import {
 } from "./grid.js";
 import { initModal } from "./modal.js";
 import { initInteractions } from "./interactions.js";
-import { initMapViewport } from "./viewport.js";
+import { initMapViewport, cancelViewportPan } from "./viewport.js";
 import { version } from "./version.js";
 
 const projectUrl = "https://github.com/nschul4/dq-tilemap-ui";
@@ -37,6 +37,7 @@ function initStorageControls() {
 
   if (exportBtn) {
     exportBtn.addEventListener("click", () => {
+      cancelViewportPan();
       const state = serializeBoardState();
       const jsonStr = JSON.stringify(state, null, 2);
       const blob = new Blob([jsonStr], { type: "application/json" });
@@ -52,6 +53,7 @@ function initStorageControls() {
 
   if (importBtn && importFileInput) {
     importBtn.addEventListener("click", () => {
+      cancelViewportPan();
       importFileInput.value = "";
       importFileInput.click();
     });

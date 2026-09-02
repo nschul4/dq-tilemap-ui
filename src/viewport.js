@@ -15,6 +15,7 @@ export class ViewportManager {
 
     this.state = { x: 0, y: 0, scale: 1 };
 
+    this.isMouseDownOnViewport = false;
     this.isMousePanning = false;
     this.mouseStartX = 0;
     this.mouseStartY = 0;
@@ -32,6 +33,16 @@ export class ViewportManager {
     this.PAN_THRESHOLD = 6;
 
     this.init();
+  }
+
+  /**
+   * Clears active mouse and touch panning flags to prevent stale drag shifts.
+   */
+  cancelPan() {
+    this.isMouseDownOnViewport = false;
+    this.isMousePanning = false;
+    this.isTouchPanning = false;
+    this.isViewportTouchActive = false;
   }
 
   /**
@@ -88,6 +99,9 @@ export class ViewportManager {
    */
   init() {
     if (!this.viewportEl || !this.canvasEl) return;
+
+    window.addEventListener("blur", () => this.cancelPan());
+    window.addEventListener("focus", () => this.cancelPan());
 
     // 1. Desktop Mouse Wheel Zoom (Cursor-Anchored)
     this.viewportEl.addEventListener(
@@ -167,6 +181,7 @@ export class ViewportManager {
     this.viewportEl.addEventListener("mousedown", (e) => {
       if (e.button !== 0) return;
 
+      this.isMouseDownOnViewport = true;
       this.isMousePanning = false;
       this.didPan = false;
       this.mouseStartX = e.clientX;
@@ -176,8 +191,9 @@ export class ViewportManager {
     });
 
     window.addEventListener("mousemove", (e) => {
-      if (e.buttons !== 1) {
+      if (!this.isMouseDownOnViewport || e.buttons !== 1) {
         this.isMousePanning = false;
+        this.isMouseDownOnViewport = false;
         return;
       }
 
@@ -197,6 +213,7 @@ export class ViewportManager {
     });
 
     window.addEventListener("mouseup", () => {
+      this.isMouseDownOnViewport = false;
       this.isMousePanning = false;
     });
 
@@ -222,6 +239,10 @@ export function initMapViewport(viewportEl, canvasEl) {
 
 export function wasPanning() {
   return viewportManager ? viewportManager.wasPanning() : false;
+}
+
+export function cancelViewportPan() {
+  viewportManager?.cancelPan();
 }
 
 export function zoomViewportBy(factor) {

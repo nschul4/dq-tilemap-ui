@@ -1,4 +1,5 @@
 import { updateTileState } from "./grid.js";
+import { cancelViewportPan } from "./viewport.js";
 
 /**
  * Manages modal dialog events and active tile context state.
@@ -25,6 +26,7 @@ export class ModalManager {
    */
   openPalette(tile) {
     if (!tile || !this.palette) return;
+    cancelViewportPan();
     this.activeTile = tile;
     this.palette.returnValue = "";
     this.palette.showModal();
