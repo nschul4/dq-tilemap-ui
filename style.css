@@ -178,9 +178,9 @@ body {
   background: rgba(30, 30, 36, 0.75);
   color: #a0a0b0;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: clamp(4px, 1vw, 8px) clamp(10px, 2vw, 16px);
+  padding: clamp(4px, 1vmin, 8px) clamp(10px, 2vmin, 16px);
   border-radius: 12px;
-  font-size: clamp(11px, 2.8vw, 15px);
+  font-size: clamp(11px, 2.8vmin, 15px);
   font-family: monospace;
   pointer-events: none;
   z-index: 10000;
@@ -237,13 +237,13 @@ body {
 }
 
 .viewport-controls button {
-  width: clamp(44px, 10vw, 56px);
-  height: clamp(44px, 10vw, 56px);
+  width: clamp(44px, 10vmin, 56px);
+  height: clamp(44px, 10vmin, 56px);
   border-radius: 50%;
   background-color: #2a2a32;
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: clamp(18px, 4vw, 24px);
+  font-size: clamp(18px, 4vmin, 24px);
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -259,7 +259,7 @@ body {
 }
 
 #zoom-reset-btn {
-  font-size: clamp(11px, 2.5vw, 14px);
+  font-size: clamp(11px, 2.5vmin, 14px);
   border-radius: 8px;
 }
 
@@ -278,20 +278,20 @@ body {
   }
 
   .viewport-controls button {
-    width: clamp(64px, 18vw, 84px);
-    height: clamp(64px, 18vw, 84px);
-    font-size: clamp(28px, 7vw, 36px);
+    width: clamp(64px, 18vmin, 84px);
+    height: clamp(64px, 18vmin, 84px);
+    font-size: clamp(28px, 7vmin, 36px);
   }
 
   #zoom-reset-btn {
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: clamp(16px, 4vmin, 20px);
     border-radius: 12px;
   }
 
   .version-badge {
     top: 20px;
     right: 20px;
-    font-size: clamp(15px, 4.5vw, 18px);
+    font-size: clamp(15px, 4.5vmin, 18px);
     padding: 8px 16px;
     border-radius: 16px;
   }
