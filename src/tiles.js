@@ -456,19 +456,6 @@ export const TILES_DATA = [
     ],
   },
   {
-    category: "Treasure Chamber",
-    variants: [
-      {
-        name: "Treasure Chamber Variant 1",
-        src: "images/tiles2/dcjcrw6-ce1b0253-3fe1-4b21-9d90-58719ae20e30/00.png",
-      },
-      {
-        name: "Treasure Chamber Variant 2",
-        src: "images/tiles2/dcjcrw6-ce1b0253-3fe1-4b21-9d90-58719ae20e30/01.png",
-      },
-    ],
-  },
-  {
     category: "Corridor",
     variants: [
       {
@@ -614,6 +601,19 @@ export const TILES_DATA = [
       {
         name: "Rotating Room Variant 5",
         src: "images/tiles/dchv2xb-891ab3f8-1d54-4549-89b9-915907c3f031/03.png",
+      },
+    ],
+  },
+  {
+    category: "Treasure Chamber",
+    variants: [
+      {
+        name: "Treasure Chamber Variant 1",
+        src: "images/tiles2/dcjcrw6-ce1b0253-3fe1-4b21-9d90-58719ae20e30/00.png",
+      },
+      {
+        name: "Treasure Chamber Variant 2",
+        src: "images/tiles2/dcjcrw6-ce1b0253-3fe1-4b21-9d90-58719ae20e30/01.png",
       },
     ],
   },
