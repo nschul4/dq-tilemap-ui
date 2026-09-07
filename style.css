@@ -296,3 +296,27 @@ body {
     border-radius: 16px;
   }
 }
+
+/* Shrink touch targets in landscape to fit vertical screen constraints */
+@media (pointer: coarse) and (orientation: landscape) {
+  .viewport-controls {
+    bottom: 12px;
+    right: 16px;
+    gap: 6px;
+  }
+
+  .viewport-controls button {
+    width: clamp(40px, 12vmin, 52px);
+    height: clamp(40px, 12vmin, 52px);
+    font-size: clamp(20px, 5vmin, 28px);
+  }
+
+  #zoom-reset-btn {
+    font-size: clamp(12px, 3vmin, 16px);
+  }
+
+  .version-badge {
+    font-size: clamp(11px, 3vmin, 14px);
+    padding: 4px 10px;
+  }
+}
